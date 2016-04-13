@@ -5,7 +5,6 @@
       {"module": "modules/static"}
     ],
     "extensions": [
-      {"extension": "depManager", "file": "extensions/depmanager"},
       {"extension": "pluginSystem", "file": "extensions/pluginsystem"}
     ],
     "SysComPort": 5051

@@ -1,11 +1,12 @@
 let socket = require('socket.io-client');
 let config = require('./config');
 
+import {System} from './system';
 import * as q from 'q';
 
 export class Socket {
   private socket: any;
-  constructor() {
+  constructor(private system: System) {
     this.connectSocket();
   }
   
@@ -14,20 +15,21 @@ export class Socket {
    */
   connectSocket() {
     this.socket = socket('http://localhost:' + config.SysComPort);
+    this.registerApi();
   }
   
-  requestDeps() {
-    let deffered = q.defer();
-    //register event listener
-    this.socket.on('dependencies', (data: any) => {
-      deffered.resolve(data);
-      
-      //remove Listener after success
-      this.socket.off('dependencies');
+  /**
+   * register handlers for all API calls
+   */
+  registerApi() {
+    //start of all plugins
+    this.socket.on('start', () => {
+      this.system.start();
     });
-    //request ressource
-    this.socket.emit('dependencies');
-    
-    return deffered.promise;
+    console.log('registered');
+    //start of a specfic plugin
+    this.socket.on('startPlugin', (plugin: string) => {
+      this.system.startPlugin(plugin);
+    });
   }
 }

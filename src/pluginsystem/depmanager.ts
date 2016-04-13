@@ -1,17 +1,17 @@
-import TinyDiInjectable from '../tinydiinjectable';
 import * as q from 'q';
 import * as child_process from 'child_process';
+
+let config = require('../config.json');
 
 /**
  * The dependency manager will hold all dependencies to webend plugins
  */
-export default class DependencyManager extends TinyDiInjectable{
+export class DependencyManager{
   private plugins: any = {};
   private initialised: boolean = false;
    
-  constructor(private config: any, private logger: Function) {
-    super();
-  }
+  constructor() {}
+  
   isInitialised() {
     return this.initialised;
   }
@@ -27,11 +27,11 @@ export default class DependencyManager extends TinyDiInjectable{
     
     function processNpmList(error: Error, stdout: string, stderr: string) {
       if (error || stderr) {
-        this.logger('Error on searching for plugins: '+ error + stderr);
+        console.log('Error on searching for plugins: '+ error + stderr);
         return deffered.reject('Error on searching for plugins: '+ error + stderr);
       }
       let plugins = JSON.parse(stdout).dependencies;
-      this.plugins = this.filterDependencies(plugins, "^" + this.config.pluginPrefix);
+      this.plugins = this.filterDependencies(plugins, "^" + config.pluginPrefix);
       
       this.initialised = true;
       deffered.resolve(this.plugins);
@@ -68,8 +68,3 @@ export default class DependencyManager extends TinyDiInjectable{
     return this.plugins;
   }
 }
-
-DependencyManager.$inject = {
-  deps: ['config', 'logger'],
-  callAs: 'class'
-};

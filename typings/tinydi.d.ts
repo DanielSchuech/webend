@@ -12,7 +12,7 @@ declare class TinyDiInjectable {
 declare class TinyDiInjector {
   bind(name: string): {
     to(module: any): TinyDiInjector,
-    load(module: any): TinyDiInjector,
+    load(module: any): any,
     lazy(module: any): TinyDiInjector
   };
   
