@@ -5,8 +5,10 @@
       {"module": "modules/static"}
     ],
     "extensions": [
-      {"extension": "depmanager", "file": "extensions/depmanager"}
-    ]
+      {"extension": "depManager", "file": "extensions/depmanager"},
+      {"extension": "pluginSystem", "file": "extensions/pluginsystem"}
+    ],
+    "SysComPort": 5051
   },
   
   "pluginPrefix": "webend_"

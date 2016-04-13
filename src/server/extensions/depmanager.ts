@@ -22,7 +22,7 @@ export default class DependencyManager extends TinyDiInjectable{
   initialise() {
     let deffered = q.defer();
     //Buffer max size: 10mb
-    var child = child_process.exec("npm ls --json --long", 
+    var child = child_process.exec('npm ls --json --long', 
       {maxBuffer: 1024 * 10000}, processNpmList.bind(this));
     
     function processNpmList(error: Error, stdout: string, stderr: string) {
