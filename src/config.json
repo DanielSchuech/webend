@@ -1,0 +1,13 @@
+{
+  "server": {
+    "port": 8080,
+    "modules": [
+      {"module": "modules/static"}
+    ],
+    "extensions": [
+      {"extension": "depmanager", "file": "extensions/depmanager"}
+    ]
+  },
+  
+  "pluginPrefix": "webend_"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "webend",
+  "version": "0.0.1",
+  "description": "Web App wide Plug-in System",
+  "main": "index.js",
+  "scripts": {
+    "buildServer": "tsc && cd src && copyfiles **/*.json ../build",
+    "start": "npm run startApp",
+    "startApp": "npm run buildServer && node ./build/start.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielSchuech/webend.git"
+  },
+  "author": "Daniel Schuech",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DanielSchuech/webend/issues"
+  },
+  "homepage": "https://github.com/DanielSchuech/webend#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "q-io": "^1.13.2",
+    "tiny-di": "^0.3.2"
+  },
+  "devDependencies": {
+    "copyfiles": "^0.2.1",
+    "typescript": "^1.8.10"
+  }
+}

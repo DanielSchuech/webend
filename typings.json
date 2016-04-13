@@ -1,0 +1,13 @@
+{
+  "name": "webend",
+  "version": false,
+  "dependencies": {},
+  "ambientDependencies": {
+    "express": "registry:dt/express#4.0.0+20160317120654",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#0.0.0+20160322035842",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "node": "registry:dt/node#4.0.0+20160412142033",
+    "q": "registry:dt/q#0.0.0+20160323171452",
+    "serve-static": "registry:dt/serve-static#1.7.1+20160104095738"
+  }
+}
