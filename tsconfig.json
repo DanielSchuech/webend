@@ -11,6 +11,7 @@
     "outDir": "build"
   },
   "exclude": [
+    "src/controlapp",
     "node_modules",
     "typings/browser",
     "typings/browser.d.ts",

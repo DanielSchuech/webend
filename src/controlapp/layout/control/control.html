@@ -1,0 +1,19 @@
+module.exports = `
+<nav class="control-navbar">
+  <div><span class="title">WebEnd Administration Panel</span></div>
+</nav>
+
+<div class="row">
+  <div class="control-sidebar col-md-3">
+    <ul class="navbar">
+      <li [routerLink]="['Dashboard']">Dashboard</li>
+      <li [routerLink]="['Management']">Management</li>
+    </ul>
+  </div>
+
+  <div class="control-content col-md-9">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+`

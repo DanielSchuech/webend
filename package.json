@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "buildServer": "tsc && cd src && copyfiles **/*.json ../build",
+    "controlAppHTML": "copyfiles -f src/controlapp/index.html build/controlapp && less",
+    "controlAppLess": "lessc src/controlapp/less/main.less build/controlapp/main.css",
+    "controlAppJS": "browserify typings/browser.d.ts src/controlapp/boot.ts -p [ tsify --debug ] -d > build/controlapp/bundle.js",
+    "buildControlApp": "npm run controlAppHTML && npm run controlAppLess && npm run controlAppJS",
     "start": "npm run startApp",
     "startApp": "npm run buildServer && node ./build/start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,6 +24,7 @@
   },
   "homepage": "https://github.com/DanielSchuech/webend#readme",
   "dependencies": {
+    "bootstrap": "^3.3.6",
     "express": "^4.13.4",
     "q-io": "^1.13.2",
     "socket.io": "^1.4.5",
@@ -28,7 +33,15 @@
     "webend_testpage": "0.0.1"
   },
   "devDependencies": {
+    "angular2": "^2.0.0-beta.15",
+    "browserify": "^13.0.0",
     "copyfiles": "^0.2.1",
-    "typescript": "^1.8.10"
+    "es6-shim": "^0.35.0",
+    "less": "^2.6.1",
+    "reflect-metadata": "^0.1.2",
+    "rxjs": "^5.0.0-beta.2",
+    "tsify": "^0.14.7",
+    "typescript": "^1.8.10",
+    "zone.js": "^0.6.11"
   }
 }
