@@ -1,3 +1,12 @@
 {
-  
+  "enabled": {
+    "webend_server": true,
+    "webend_testpage": true
+  },
+  "plugins": {
+    "webend_server": {
+      "port": "3000",
+      "test": "1234567"
+    }
+  }
 }

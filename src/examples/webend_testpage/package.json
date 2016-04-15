@@ -1,0 +1,17 @@
+{
+  "name": "webend_testpage",
+  "version": "0.0.1",
+  "description": "example route/test for webend server plugin",
+  "keywords": [],
+  "author": {
+    "name": "Daniel Schuech",
+    "email": "dschuech@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DanielSchuech",
+  "main": "testpage.js",
+  "devDependencies": {},
+  "dependencies": {
+    "webend_server": "0.0.1"
+  }
+}

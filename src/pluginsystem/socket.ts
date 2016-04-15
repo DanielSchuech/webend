@@ -1,5 +1,5 @@
 let socket = require('socket.io-client');
-let config = require('./config');
+let config = require('../config');
 
 import {System} from './system';
 import * as q from 'q';
@@ -14,7 +14,7 @@ export class Socket {
    * connects to the control websocket to receive commands
    */
   connectSocket() {
-    this.socket = socket('http://localhost:' + config.SysComPort);
+    this.socket = socket('http://localhost:' + config.server.SysComPort);
     this.registerApi();
   }
   
@@ -26,7 +26,7 @@ export class Socket {
     this.socket.on('start', () => {
       this.system.start();
     });
-    console.log('registered');
+    
     //start of a specfic plugin
     this.socket.on('startPlugin', (plugin: string) => {
       this.system.startPlugin(plugin);

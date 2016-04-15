@@ -31,7 +31,7 @@ export class DependencyManager{
         return deffered.reject('Error on searching for plugins: '+ error + stderr);
       }
       let plugins = JSON.parse(stdout).dependencies;
-      this.plugins = this.filterDependencies(plugins, "^" + config.pluginPrefix);
+      this.plugins = DependencyManager.filterDependencies(plugins, "^" + config.pluginPrefix);
       
       this.initialised = true;
       deffered.resolve(this.plugins);
@@ -43,7 +43,7 @@ export class DependencyManager{
   /**
    * filters the plugin dependencies with the configured prefix out of the all packages
    */
-  filterDependencies(json: any, regexString: string) {
+  static filterDependencies(json: any, regexString: string) {
     if (!json || json === {}) {
       return {};
     }
@@ -53,7 +53,8 @@ export class DependencyManager{
     keys.forEach(function(entry) {
       if (pattern.test(entry)) {
         returnJson[entry] = json[entry];
-        returnJson[entry].dependencies = this.filterDependencies(returnJson[entry].dependencies, regexString);
+        returnJson[entry].dependencies = 
+          DependencyManager.filterDependencies(returnJson[entry].dependencies, regexString);
       }
     });
     

@@ -7,7 +7,7 @@ import * as socket from 'socket.io';
 
 export default class PluginSystem extends TinyDiInjectable{
   private child: child_process.ChildProcess;
-  constructor(private config:any) {
+  constructor(private config:any, private logger: any) {
     super();
     
     this.createSocket();
@@ -16,7 +16,9 @@ export default class PluginSystem extends TinyDiInjectable{
   
   start() {
     let file = path.normalize(__dirname + '/../../pluginsystem/system.js');
-    //this.child = child_process.spawn('node', [file]);
+    this.child = child_process.spawn('node', [file]);
+    this.child.stdout.on('data', (data: any) => {this.logger(`${data}`)});
+    this.child.stderr.on('data', (data: any) => {this.logger(`${data}`)});
   }
   
   /**
@@ -28,16 +30,14 @@ export default class PluginSystem extends TinyDiInjectable{
     let server = (<any>http).Server(app);
     let io = socket(server);
     
-    io.on('connection', function(socket: SocketIO.Socket){
+    /*io.on('connection', function(socket: SocketIO.Socket){
       console.log('pluginsystem connected');
-      console.log('emit')
-      io.emit('startPlugin', 'webend');
-    });
+    });*/
     
     server.listen(this.config.server.SysComPort, () => {});
   }
 }
 PluginSystem.$inject = {
-  deps: ['config'],
+  deps: ['config', 'logger'],
   callAs: 'class'
 }

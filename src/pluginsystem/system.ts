@@ -8,13 +8,14 @@ let config = require('./config');
 
 export class System {
   private socket: Socket;
-  private status: {[name: string]: boolean};
+  private status: {[name: string]: boolean} = {};
   private depManager: DependencyManager;
   private pluginInjector: Injector;
   
   constructor() {
     this.depManager = new DependencyManager();
     this.socket = new Socket(this);
+    this.start();
   }
   
   /**
@@ -24,11 +25,12 @@ export class System {
     this.pluginInjector = new Injector();
     this.pluginInjector.bind('injector').to(this.pluginInjector);
     this.pluginInjector.bind('status').to(this.status);
+    this.pluginInjector.bind('config').to(config.plugins);
     this.pluginInjector.setResolver(this.dependencyResolver);
     
     console.log('Starting plugins........');
     if (!this.depManager.isInitialised()) {
-      this.depManager.initialise().then(this.loadPlugins)
+      this.depManager.initialise().then(this.loadPlugins.bind(this))
     } else {
       this.loadPlugins(this.depManager.getPlugins());
     }
@@ -39,15 +41,15 @@ export class System {
    */
   loadPlugins(deps: any) {
     let keys = Object.keys(deps);
-    keys.forEach(function(plugin) {
+    keys.forEach(function(plugin: string) {
       //only start plugins which are enabled
-      if (config.plugins[plugin]) {
+      if (config.enabled[plugin]) {
         this.startPlugin(plugin);
       } else {
         this.status[plugin] = false;
       }
       
-    });
+    }.bind(this));
   }
   
   /**
@@ -60,7 +62,7 @@ export class System {
     let depsLoaded = this.loadDependencies(dependencies[plugin].dependencies, plugin);
     if (!depsLoaded) {
       //dependencies not load -> cant start plugin
-      console.log('Dependencies coudnt be loaded for ' + plugin);
+      console.log('Dependencies coudn\'t be loaded for ' + plugin);
       this.status[plugin] = false;
       return false;
     }
@@ -79,7 +81,6 @@ export class System {
       
       //load and start plugin
       let module = this.pluginInjector.bind(plugin).load(plugin);
-      module.start(pluginConfigs[plugin]);
       
       this.status[plugin] = true;
       return true;
@@ -110,8 +111,8 @@ export class System {
       } else {
         // plugin has already tried to start or is disabled in config
         if (!this.status[key]) {
-          console.log('Plugin ' + plugin + 'requires dependency ' + key + 
-            'which couldnt be loaded or is deactivated -> activate it!');
+          console.log('Plugin ' + plugin + ' requires dependency ' + key + 
+            ' which couldnt be loaded or is deactivated -> activate it!');
           allPluginsLoaded = false;
         }
       }

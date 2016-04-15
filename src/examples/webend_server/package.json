@@ -1,0 +1,21 @@
+{
+  "name": "webend_server",
+  "version": "0.0.1",
+  "description": "example express server for your special api",
+  "keywords": [
+    "express",
+    "framework",
+    "server"
+  ],
+  "author": {
+    "name": "Daniel Schuech",
+    "email": "dschuech@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DanielSchuech",
+  "main": "server.js",
+  "devDependencies": {},
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
