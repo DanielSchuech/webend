@@ -2,31 +2,44 @@ import Injector = require('tiny-di');
 import * as path from 'path';
 import * as express from 'express';
 import * as http from 'http';
+import {Logger} from './logger';
+import * as io from 'socket.io';
 
 export class Daemon {
   private injector: TinyDiInjector;
   private server: express.Express;
+  private logger: Logger;
+  private httpServer: http.Server;
   
-  constructor(private logger: Function, private config: any) {
+  constructor(usrLogger: Function, private config: any) {
+    //create logger
+    this.logger = new Logger();
+    this.logger.addListener(usrLogger);
+    
     //Prepare dependency injection
     this.injector = new Injector();
     this.injector.bind('injector').to(this.injector);
-    this.injector.setResolver(this.dependencyResolver);
+    this.injector.setResolver(this.dependencyResolver.bind(this));
     
     //create express server
     this.server = express();
+    this.httpServer = this.createServer();
+    let webSocket = io(this.httpServer);
     
     //link injected variables
     this.injector
       .bind('config').to(config)
       .bind('server').to(this.server)
-      .bind('logger').to(this.logger);
+      .bind('logger').to(this.logger)
+      .bind('websocket').to(webSocket);
       
     //load extensions and modules
     this.loadExtensions();
     this.loadModules();
     
-    this.runServer();
+    //start Server
+    this.httpServer.listen(this.config.server.port);
+    this.logger.log('Server startet at port ' + this.config.server.port);
   }
   
   dependencyResolver(moduleId: string) {
@@ -37,10 +50,10 @@ export class Daemon {
       try {
         return require(moduleId).default;
       } catch (e2) {
-        this.logger('Extension ' + moduleId + ' failed to load');
-        this.logger(modulePath);
-        this.logger('errors', e, e2);
-        this.logger(new Error().stack);
+        this.logger.log('Extension ' + moduleId + ' failed to load');
+        this.logger.log(modulePath);
+        this.logger.log('errors' + e + e2);
+        this.logger.log(new Error().stack);
         return false;
       }
     }
@@ -60,18 +73,16 @@ export class Daemon {
     });
   }
   
-  runServer() {
+  createServer() {
     var s = http.createServer(this.server);
     s.on('error', function(err: any) {
       if (err.code === 'EADDRINUSE') {
-        this.logger('Development server is already started at port ' + 
+        this.logger.log('Development server is already started at port ' + 
           this.config.server.port);
       } else {
         throw err;
       }
     }.bind(this));
-    
-    s.listen(this.config.server.port);
-    this.logger('Server startet at port ' + this.config.server.port);
+    return s;
   }
 }

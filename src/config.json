@@ -2,7 +2,8 @@
   "server": {
     "port": 8080,
     "modules": [
-      {"module": "modules/static"}
+      {"module": "modules/static"},
+      {"module": "modules/logger"}
     ],
     "extensions": [
       {"extension": "pluginSystem", "file": "extensions/pluginsystem"}

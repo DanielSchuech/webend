@@ -9,6 +9,7 @@
     "node": "registry:dt/node#4.0.0+20160412142033",
     "q": "registry:dt/q#0.0.0+20160323171452",
     "serve-static": "registry:dt/serve-static#1.7.1+20160104095738",
-    "socket.io": "registry:dt/socket.io#1.4.4+20160317120654"
+    "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
+    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654"
   }
 }

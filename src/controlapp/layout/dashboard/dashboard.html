@@ -9,7 +9,8 @@ module.exports = `
       <tr>
         <td>Restart Plugin System:</td>
         <td>
-          <button type="button" class="btn btn-default">RESTART</button>
+          <button type="button" class="btn btn-default"
+            (click)="restartPluginSystem()">RESTART</button>
         </td>
       </tr>
       <tr>
@@ -29,6 +30,7 @@ module.exports = `
   </div>
   <div class="col-md-6">
     <div class="std-bold">System logs</div>
+    <div><pre class="dashboard-logs">{{logs}}</pre></div>
   </div> 
 </div>
 `
