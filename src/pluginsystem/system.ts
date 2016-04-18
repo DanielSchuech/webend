@@ -28,6 +28,8 @@ export class System {
     this.pluginInjector.bind('config').to(config.plugins);
     this.pluginInjector.setResolver(this.dependencyResolver);
     
+    this.changePluginStatus('webend', true);
+    
     console.log('Starting plugins........');
     if (!this.depManager.isInitialised()) {
       this.depManager.initialise().then(this.loadPlugins.bind(this))
@@ -46,7 +48,7 @@ export class System {
       if (config.enabled[plugin]) {
         this.startPlugin(plugin);
       } else {
-        this.status[plugin] = false;
+        this.changePluginStatus(plugin, false);
       }
       
     }.bind(this));
@@ -63,7 +65,7 @@ export class System {
     if (!depsLoaded) {
       //dependencies not load -> cant start plugin
       console.log('Dependencies coudn\'t be loaded for ' + plugin);
-      this.status[plugin] = false;
+      this.changePluginStatus(plugin, false);
       return false;
     }
     
@@ -75,14 +77,14 @@ export class System {
        * cannot be required in backend
        */
       if (!dependencies[plugin].main) {
-        this.status[plugin] = true;
+        this.changePluginStatus(plugin, true);
         return true;
       }
       
       //load and start plugin
       let module = this.pluginInjector.bind(plugin).load(plugin);
       
-      this.status[plugin] = true;
+      this.changePluginStatus(plugin, true);
       return true;
     } catch (e) {
       console.log('Could not load plugin: ' + plugin);
@@ -142,6 +144,14 @@ export class System {
     }
   }
   
+  /** 
+   * set the status of a plugin
+   * the control system will be informed via socket
+   */
+  changePluginStatus(plugin: string, status: boolean) {
+    this.status[plugin] = status;
+    this.socket.changedStatus(this.status);
+  }
   
 }
 

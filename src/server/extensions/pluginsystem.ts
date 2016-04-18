@@ -8,8 +8,10 @@ import {Logger} from '../logger';
 
 export default class PluginSystem extends TinyDiInjectable{
   private child: child_process.ChildProcess;
+  private pluginStatus: {[name: string]: boolean};
+  
   constructor(private config:any, private logger: Logger, 
-      websocket: SocketIO.Server) {
+      private websocket: SocketIO.Server) {
     super();
     
     websocket.on('connection', (client) => {
@@ -29,9 +31,16 @@ export default class PluginSystem extends TinyDiInjectable{
     let server = (<any>http).Server(app);
     let io = socket(server);
     
-    /*io.on('connection', function(socket: SocketIO.Socket){
-      console.log('pluginsystem connected');
-    });*/
+    io.on('connection', (socket: SocketIO.Socket) => {
+      /**
+       * listener for changed status of any plugin
+       * broadcast to all clients
+       */
+      socket.on('changedStatus', (data: {[name: string]: boolean}) => {
+        this.pluginStatus = data;
+        this.websocket.emit('pluginStatus', data);
+      });
+    });
     
     server.listen(this.config.server.SysComPort, () => {});
   }
@@ -53,6 +62,10 @@ export default class PluginSystem extends TinyDiInjectable{
    * stops the plugin system -> kill the process
    */
   stop() {
+    //reset status of webend plugin status
+    this.pluginStatus['webend'] = false;
+    this.websocket.emit('pluginStatus', this.pluginStatus);
+    
     this.logger.log('Stopping Plugin System.............');
     this.child.kill();
   }
@@ -67,12 +80,17 @@ export default class PluginSystem extends TinyDiInjectable{
   }
   
   /**
-   * register websocket routes for plugin system -> start, stop, restart 
+   * register websocket routes for plugin system -> start, stop, restart,
+   * get status of all plugins
    */
   registerWebsocketRoutes(client: SocketIO.Socket) {
     client.on('startPluginSystem', this.start.bind(this));
     client.on('stopPluginSystem', this.stop.bind(this));
     client.on('restartPluginSystem', this.restart.bind(this));
+    
+    client.on('pluginStatus', () => {
+      client.emit('pluginStatus', this.pluginStatus);
+    });
   }
 }
 PluginSystem.$inject = {

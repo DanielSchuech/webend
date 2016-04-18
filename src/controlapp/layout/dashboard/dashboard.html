@@ -4,28 +4,33 @@ module.exports = `
     <table class="dashboard-table">
       <tr>
         <td>Current Status:</td>
-        <td>running</td>
+        <td>
+          <span *ngIf="pluginStatus.webend" class="webend-success">running</span>
+          <span *ngIf="!pluginStatus.webend" class="webend-error">stopped</span>
+        </td>
       </tr>
       <tr>
         <td>Restart Plugin System:</td>
         <td>
-          <button type="button" class="btn btn-default"
-            (click)="restartPluginSystem()">RESTART</button>
+          <div><button type="button" class="btn btn-default"
+            (click)="startPluginSystem()"
+            *ngIf="!pluginStatus.webend">START</button></div>
+          <div><button type="button" class="btn btn-default"
+            (click)="restartPluginSystem()"
+            *ngIf="pluginStatus.webend">RESTART</button></div>
+          <div><button type="button" class="btn btn-default"
+            (click)="stopPluginSystem()"
+            *ngIf="pluginStatus.webend">STOP</button></div>
         </td>
       </tr>
       <tr>
         <td>Running Plugins:</td>
         <td>
           <ul>
-            <li>Plugin 1</li>
-            <li>Plugin 2</li>
-            <li>Plugin 3</li>
-            <li>Plugin 4</li>
-            <li>Plugin 5</li>
+            <li *ngFor="#item of activePlugins">{{item}}</li>
           </ul>  
         </td>
       </tr>
-      
     </table>
   </div>
   <div class="col-md-6">

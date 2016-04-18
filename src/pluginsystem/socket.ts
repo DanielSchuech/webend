@@ -32,4 +32,12 @@ export class Socket {
       this.system.startPlugin(plugin);
     });
   }
+  
+  /**
+   * changed the status of an plugin
+   * inform control system
+   */
+  changedStatus(allStatus: any) {
+    this.socket.emit('changedStatus', allStatus);
+  }
 }
