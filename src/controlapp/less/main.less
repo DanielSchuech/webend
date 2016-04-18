@@ -1,9 +1,28 @@
 @import "variable.less";
 @import "control";
+@import "dashboard";
 @import "../../../node_modules/bootstrap/less/bootstrap";
 
 .bg{
   background-color: @main-bg-color;
   color: @main-text-color;
   margin: 0px;
+}
+
+.btn-default {
+  background-color: @main-bg-color;
+  border-color: @main-text-color;
+}
+.btn-default:focus {
+  background-color: @main-bg-color;
+  border-color: @main-text-color;
+}
+.btn-default:hover {
+  background-color: @main-text-color;
+  border-color: #FFF;
+  color: #FFF;
+}
+
+.std-bold {
+  font-weight: 600;
 }

@@ -1,61 +1,46 @@
 .control-navbar {
-  background-color: #131b21;
-  color: #e5e5e5;
-  padding: 6px;
-  
-  border-bottom-style: solid;
-  border-color: #b9003d;
-  border-width: 1.3px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  font-size: 1.7em;
+  font-weight: bold;
+    
   .title {
-    display: block;
-    font-size: 2.3em;
-    font-weight: bold;
+    border-right: 1px solid #000;
   }
-}
-
-.control-sidebar {
-  display: inline-block;
   
-  .navbar {
+  .header {
     list-style: none;
     padding: 0px;
     
-    .router-link-active {
-      color: #b9003d;
-      background: rgba(255,255,255,0.2);
+    li {
+      float: left;
+      padding-right: 21px;
+      margin-right: 21px;
     }
+  }
+  .menu {
+    float: right;
+    list-style: none;
+    padding: 0px;
+    font-size: 0.7em;
+    font-weight: 100;
+    line-height: 33px;
     
     li {
-      padding: 10px;
-      border-bottom-style: solid;
-      border-color: #b9003d;
-      border-width: 1px;
-      
-      font-size: 1.2em;
+      float: left;
+      padding: 0px 20px;
+      cursor: default;
     }
     li:hover {
-      background: rgba(255,255,255,0.2);
+      background-color: @main-text-color;
+      color: #FFF;
+    }
+    .router-link-active {
+      border-bottom: 1px solid;
     }
   }
 }
-
-.control-content {
-  height: 400px;
-  background-color: #141a1f;
-}
-
-.circle-green {
-  background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, lightgreen 0%, green 100%, blue 5%);
-  background-image: -webkit-radial-gradient(45px 45px, circle cover, lightgreen, green);
-  background-image: radial-gradient(45px 45px 45deg, circle cover, lightgreen 0%, green 100%, blue 5%);
-  border: 1px solid green;
-  -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
-  
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 20px;
-}
+.control-navbar:after {content:''; clear: left;}
 

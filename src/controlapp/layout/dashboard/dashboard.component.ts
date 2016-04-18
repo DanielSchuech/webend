@@ -2,7 +2,7 @@ import {Component} from 'angular2/core';
 
 @Component({
   selector: 'status',
-  template: 'status text'
+  template: require('./dashboard.html')
 })
 export class DashboardComponent {}
 
