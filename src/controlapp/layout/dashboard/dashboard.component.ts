@@ -1,9 +1,11 @@
 import {Component} from 'angular2/core';
 import {Websocket} from '../../services/websocket';
+import {StatusComponent} from '../../helper/status/status.component';
 
 @Component({
   selector: 'status',
-  template: require('./dashboard.html')
+  template: require('./dashboard.html'),
+  directives: [StatusComponent]
 })
 export class DashboardComponent {
   public logs: string;

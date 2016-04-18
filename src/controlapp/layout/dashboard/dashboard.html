@@ -5,8 +5,7 @@ module.exports = `
       <tr>
         <td>Current Status:</td>
         <td>
-          <span *ngIf="pluginStatus.webend" class="webend-success">running</span>
-          <span *ngIf="!pluginStatus.webend" class="webend-error">stopped</span>
+          <webend-status [status]="pluginStatus.webend"></webend-status>
         </td>
       </tr>
       <tr>

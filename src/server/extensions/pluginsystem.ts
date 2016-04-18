@@ -9,6 +9,7 @@ import {Logger} from '../logger';
 export default class PluginSystem extends TinyDiInjectable{
   private child: child_process.ChildProcess;
   private pluginStatus: {[name: string]: boolean};
+  private systemSocket: SocketIO.Server;
   
   constructor(private config:any, private logger: Logger, 
       private websocket: SocketIO.Server) {
@@ -29,9 +30,9 @@ export default class PluginSystem extends TinyDiInjectable{
   createSocket() {
     let app = express();
     let server = (<any>http).Server(app);
-    let io = socket(server);
+    this.systemSocket = socket(server);
     
-    io.on('connection', (socket: SocketIO.Socket) => {
+    this.systemSocket.on('connection', (socket: SocketIO.Socket) => {
       /**
        * listener for changed status of any plugin
        * broadcast to all clients
@@ -63,7 +64,7 @@ export default class PluginSystem extends TinyDiInjectable{
    */
   stop() {
     //reset status of webend plugin status
-    this.pluginStatus['webend'] = false;
+    this.resetAllPluginStatus();
     this.websocket.emit('pluginStatus', this.pluginStatus);
     
     this.logger.log('Stopping Plugin System.............');
@@ -90,6 +91,17 @@ export default class PluginSystem extends TinyDiInjectable{
     
     client.on('pluginStatus', () => {
       client.emit('pluginStatus', this.pluginStatus);
+    });
+    
+    client.on('startPlugin', (plugin: string) => {
+      this.systemSocket.emit('startPlugin', plugin);
+    });
+  }
+  
+  resetAllPluginStatus() {
+    let keys = Object.keys(this.pluginStatus);
+    keys.forEach((key) => {
+      this.pluginStatus[key] = false;
     });
   }
 }

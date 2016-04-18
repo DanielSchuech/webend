@@ -8,6 +8,7 @@ export default class Static extends TinyDiInjectable {
     let indexFile = path.normalize(__dirname + '/../../controlapp/index.html');
     let bundleFile = path.normalize(__dirname + '/../../controlapp/bundle.js');
     let cssFile = path.normalize(__dirname + '/../../controlapp/main.css');
+    let fontDir = path.normalize(__dirname + '/../../controlapp/fonts/');
     
     server.get('/bundle.js', (req, res) => {
       res.sendFile(bundleFile);
@@ -15,6 +16,11 @@ export default class Static extends TinyDiInjectable {
     
     server.get('/main.css', (req, res) => {
       res.sendFile(cssFile);
+    });
+    
+    //resolve glyphicons fonts
+    server.get('/fonts/:font', function(req, res) {
+      res.sendFile(fontDir + req.params.font);
     });
 
     server.get('/*', (req, res) => {

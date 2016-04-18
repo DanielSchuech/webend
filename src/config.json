@@ -2,6 +2,7 @@
   "server": {
     "port": 8080,
     "modules": [
+      {"module": "modules/configuration"},
       {"module": "modules/static"},
       {"module": "modules/logger"}
     ],

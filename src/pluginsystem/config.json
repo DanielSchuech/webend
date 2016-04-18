@@ -1,6 +1,6 @@
 {
   "enabled": {
-    "webend_server": true,
+    "webend_server": false,
     "webend_testpage": true
   },
   "plugins": {

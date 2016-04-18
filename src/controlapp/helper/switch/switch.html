@@ -1,0 +1,10 @@
+module.exports = `
+  <div class="btn-group">
+    <button type="button" (click)="switch()" class="btn btn-xs {{model ? 'btn-success' : ''}}">
+        ON
+    </button>
+    <button type="button" (click)="switch()" class="btn btn-xs {{!model ? 'btn-danger' : ''}}">
+        OFF
+    </button>
+  </div>
+`
