@@ -19,6 +19,7 @@ export default class Configuration extends TinyDiInjectable {
     this.depManager.initialise();
     
     websocket.on('connection', (socket) => {
+      //send values for autostart and deps for each plugin
       socket.on('getPluginMetadata', () => {
         this.sendMetadata(socket);
       });
@@ -30,8 +31,25 @@ export default class Configuration extends TinyDiInjectable {
           pluginSystem.restart();
         });
       });
+      
+      //request plugin information + configuration
+      socket.on('getPluginConfig', (plugin: string) => {
+        this.collectPluginConfigData(plugin).then((data: any) => {
+          socket.emit('getPluginConfig', data);
+        });
+      });
+      
+      //save plugin configuration
+      socket.on('savePluginConfig', (plugin: string, config: any) => {
+        this.savePluginConfig(plugin, config).then(() => {
+          pluginSystem.restart();
+          //send new config
+          this.collectPluginConfigData(plugin).then((data: any) => {
+            socket.emit('getPluginConfig', data);
+          });
+        });
+      });
     });
-    
   }
   
   /**
@@ -85,6 +103,30 @@ export default class Configuration extends TinyDiInjectable {
         this.logger.log('Error on writing Config File!');
         this.logger.log(err);
       });
+  }
+  
+  collectPluginConfigData(plugin: string) {
+    if (this.depManager.isInitialised()) {
+      return combineInfoAndConfig.bind(this)(this.depManager.getPlugins());
+    } else {
+      return this.depManager.initialise().then(combineInfoAndConfig.bind(this));
+    }
+    
+    function combineInfoAndConfig(deps: any) {
+      return this.readConfigFile().then((config: any) => {
+        return {
+          info: deps[plugin],
+          config: config.plugins[plugin]
+        };
+      });
+    }
+  }
+  
+  savePluginConfig(plugin: string, pluginConfig: any) {
+    return this.readConfigFile().then((config: any)=> {
+      config.plugins[plugin] = pluginConfig;
+      return this.writeConfigFile(config);
+    });
   }
 }
 Configuration.$inject = {

@@ -6,7 +6,11 @@
   "plugins": {
     "webend_server": {
       "port": "3000",
-      "test": "1234567"
+      "test": "1234567",
+      "object": {
+        "a": "very interesting!",
+        "b": ["abc", 123]
+      }
     }
   }
 }

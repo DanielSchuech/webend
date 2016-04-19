@@ -2,11 +2,12 @@ import {Component} from 'angular2/core';
 import {StatusComponent} from '../../helper/status/status.component';
 import {SwitchComponent} from '../../helper/switch/switch.component';
 import {Websocket} from '../../services/websocket';
+import {ROUTER_DIRECTIVES} from 'angular2/router';
 
 @Component({
   selector: 'manage',
   template: require('./manage.html'),
-  directives: [StatusComponent, SwitchComponent]
+  directives: [StatusComponent, SwitchComponent, ROUTER_DIRECTIVES]
 })
 export class ManageComponent {
   public plugins: Plugin[] = [];

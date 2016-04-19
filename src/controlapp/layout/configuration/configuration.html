@@ -1,0 +1,62 @@
+module.exports = `
+  <div class="col-md-12">
+      <table class="configuration-table" *ngIf="data">
+        <tr>
+          <td>Plugin Name</td>
+          <td>{{data.info.name}}</td>
+        </tr>
+        <tr>
+          <td>Version</td>
+          <td>{{data.info.version}}</td>
+        </tr>
+        <tr>
+          <td>Description</td>
+          <td>{{data.info.description}}</td>
+        </tr>
+        <tr>
+          <td>Author</td>
+          <td>
+            <ul>
+              <li *ngFor="#author of data.info.author">
+                {{author}}
+              </li>  
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>Homepage</td>
+          <td>{{data.info.homepage}}</td>
+        </tr>
+        <tr>
+          <td>Keywords</td>
+          <td>{{data.info.keywords}}</td>
+        </tr>
+        <tr>
+          <td>License</td>
+          <td>{{data.info.license}}</td>
+        </tr>
+      </table>  
+      
+      <table class="configuration-table" *ngIf="data && data.config">
+        <tr>
+          <th colspan="2">Configuration</th>
+        </tr>
+        <tr *ngFor="#config of data.config" 
+          [ngClass]="{'webend-warning': config.invalid}">
+          <td>{{config.key}}</td>
+          <td>
+            <input *ngIf="!config.object" class="form-control" type="text"
+              [(ngModel)]="config.value">
+            <textarea *ngIf="config.object" class="form-control" 
+              [(ngModel)]="config.value" rows="7"
+              (blur)="checkTextareaValidity(config)"></textarea>
+          </td>
+        </tr>
+        <tr class="tr-btn" (click)="save()">
+          <td colspan="2">
+            SAVE & RESTART
+          </td>
+        </tr>    
+      </table>
+  </div>
+`
