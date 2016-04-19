@@ -28,7 +28,6 @@ export class System {
     this.pluginInjector.bind('config').to(config.plugins);
     this.pluginInjector.setResolver(this.dependencyResolver);
     
-    this.changePluginStatus('webend', true);
     
     console.log('Starting plugins........');
     if (!this.depManager.isInitialised()) {
@@ -42,6 +41,9 @@ export class System {
    * loads all plugins given as dependencies
    */
   loadPlugins(deps: any) {
+    //plugins are not loaded but system is ready!
+    this.changePluginStatus('webend', true);
+    
     let keys = Object.keys(deps);
     keys.forEach(function(plugin: string) {
       //only start plugins which are enabled
@@ -59,6 +61,13 @@ export class System {
    * dependencies will be started at first
    */
   startPlugin(plugin: string) {
+    //system not started -> cannot start plugin
+    if (!this.status['webend']) {
+      console.log('System not started -> Couldn\'t start Plugin ' + plugin);
+      this.changePluginStatus(plugin, false);
+      return false;
+    }
+    
     //check and load dependencies for plugin
     let dependencies = this.depManager.getPlugins();
     let depsLoaded = this.loadDependencies(dependencies[plugin].dependencies, plugin);

@@ -1,7 +1,7 @@
 {
   "enabled": {
     "webend_server": false,
-    "webend_testpage": true
+    "webend_testpage": false
   },
   "plugins": {
     "webend_server": {

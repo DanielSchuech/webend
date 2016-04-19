@@ -10,6 +10,7 @@ import {Websocket} from '../../services/websocket';
 })
 export class ManageComponent {
   public plugins: Plugin[] = [];
+  public changedAutostart = false;
   
   constructor(private websocket: Websocket) {    
     this.registerWebsocketRoutes();
@@ -50,8 +51,8 @@ export class ManageComponent {
           if (!this.plugins[index].status) {
             this.addStoppedWarning(plugin, this.plugins[index]);
           }
-          //check autostart
-          if (!this.plugins[index].enabled) {
+          //check autostart iff plugin is in autostart
+          if (!this.plugins[index].autostart && plugin.autostart) {
             this.addAutostartWarning(plugin, this.plugins[index]);
           }
         }
@@ -74,6 +75,31 @@ export class ManageComponent {
   }
   
   /**
+   * checks if changes are done on autostart settings,
+   * result available in changedAutostart
+   */
+  isAutostartChanged() {
+    this.changedAutostart = false;
+    this.plugins.forEach((plugin) => {
+      if (plugin.switch !== plugin.autostart) {
+        this.changedAutostart = true;
+      }
+    });
+    return this.changedAutostart;
+  }
+  
+  /**
+   * save autostart settings
+   */
+  save() {
+    let enabled: {[name: string]: boolean} = {};
+    this.plugins.forEach((plugin) => {
+      enabled[plugin.name] = plugin.switch;
+    });
+    this.websocket.socket.emit('saveAutostart', enabled);
+  }
+  
+  /**
    * registers event listener for websocket connection
    */
   registerWebsocketRoutes() {
@@ -87,19 +113,22 @@ export class ManageComponent {
         let index = this.indexOfPlugin(key);
         if (index > -1) {
           this.plugins[index].deps = data.deps[key].dependencies;
-          this.plugins[index].enabled = data.enabled[key];
+          this.plugins[index].autostart = data.enabled[key];
+          this.plugins[index].switch = data.enabled[key];
         }
         //else push new one if not webend (this is the whole system)
         else if (key !== 'webend') {
           this.plugins.push({
             name: key,
             status: false,
-            enabled: data.enabled[key],
+            autostart: data.enabled[key],
+            switch: data.enabled[key],
             deps: data.deps[key].dependencies
           });
         }
       });
       this.checkDeps();
+      this.isAutostartChanged();
     });
     
     /**
@@ -118,7 +147,8 @@ export class ManageComponent {
           this.plugins.push({
             name: key,
             status: data[key],
-            enabled: false,
+            autostart: false,
+            switch: false,
             deps: {}
           });
         }
@@ -130,8 +160,9 @@ export class ManageComponent {
 
 export interface Plugin {
   name: string, 
-  status: boolean, 
-  enabled: boolean, 
+  status: boolean,    //current status
+  autostart: boolean, //autostart enabled
+  switch: boolean,    //switch setting for autostart
   deps: any,
   warning?: string
 }
