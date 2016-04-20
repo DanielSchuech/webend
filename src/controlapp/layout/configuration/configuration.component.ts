@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit, OnDestroy} from 'angular2/core';
 import {Websocket} from '../../services/websocket';
 import {RouteParams} from 'angular2/router';
 
@@ -6,23 +6,30 @@ import {RouteParams} from 'angular2/router';
   selector: 'configuration',
   template: require('./configuration.html')
 })
-export class ConfigurationComponent implements OnInit{
+export class ConfigurationComponent implements OnInit, OnDestroy {
   public data: any;
-  constructor(private routeParams: RouteParams, private websocket: Websocket) {
-    console.log('constr')
-  }
+  constructor(private routeParams: RouteParams, private websocket: Websocket) {}
   
   /**
    * evaluate route parameter in onInit for better testability
    */
-  ngOnInit() {console.log('init')
-    this.websocket.socket.on('getPluginConfig', (data: any) => {
-      this.data = data;
-      this.prepareConfigForDisplay(data.config);
-      this.prepareAuthorsForDisplay();
-      console.log(data);
-    });
+  ngOnInit() {
+    this.websocket.socket.on('getPluginConfig', this.pluginConfigListener);
     this.websocket.socket.emit('getPluginConfig', this.routeParams.get('plugin'));
+  }
+  
+  ngOnDestroy() {
+    this.websocket.socket.removeListener('getPluginConfig', this.pluginConfigListener);
+  }
+  
+  /**
+   * websocket listener for incomming plugin config
+   */
+  pluginConfigListener = this._pluginConfigListener.bind(this);
+  _pluginConfigListener(data: any) {
+    this.data = data;
+    this.prepareConfigForDisplay(data.config);
+    this.prepareAuthorsForDisplay();
   }
   
   /**

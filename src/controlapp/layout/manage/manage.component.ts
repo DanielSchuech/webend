@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, OnDestroy} from 'angular2/core';
 import {StatusComponent} from '../../helper/status/status.component';
 import {SwitchComponent} from '../../helper/switch/switch.component';
 import {Websocket} from '../../services/websocket';
@@ -9,7 +9,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
   template: require('./manage.html'),
   directives: [StatusComponent, SwitchComponent, ROUTER_DIRECTIVES]
 })
-export class ManageComponent {
+export class ManageComponent implements OnDestroy {
   public plugins: Plugin[] = [];
   public changedAutostart = false;
   
@@ -17,6 +17,11 @@ export class ManageComponent {
     this.registerWebsocketRoutes();
     websocket.socket.emit('getPluginMetadata');
     websocket.socket.emit('pluginStatus');
+  }
+  
+  ngOnDestroy() {
+    this.websocket.socket.removeListener('getPluginMetadata', this.getPluginMetadataListener);
+    this.websocket.socket.removeListener('pluginStatus', this.pluginStatusListener);
   }
   
   indexOfPlugin(pluginName: string) {
@@ -104,58 +109,63 @@ export class ManageComponent {
    * registers event listener for websocket connection
    */
   registerWebsocketRoutes() {
-    /**
-     * adds new metadata(start enabled status & dependencies) into plugins
-     */
-    this.websocket.socket.on('getPluginMetadata', (data: any) => {
-      let keys = Object.keys(data.deps);
-      keys.forEach((key) => {
-        //iff plugin exists in plugins -> override settings
-        let index = this.indexOfPlugin(key);
-        if (index > -1) {
-          this.plugins[index].deps = data.deps[key].dependencies;
-          this.plugins[index].autostart = data.enabled[key];
-          this.plugins[index].switch = data.enabled[key];
-        }
-        //else push new one if not webend (this is the whole system)
-        else if (key !== 'webend') {
-          this.plugins.push({
-            name: key,
-            status: false,
-            autostart: data.enabled[key],
-            switch: data.enabled[key],
-            deps: data.deps[key].dependencies
-          });
-        }
-      });
-      this.checkDeps();
-      this.isAutostartChanged();
+    //adds new metadata(start enabled status & dependencies) into plugins
+    this.websocket.socket.on('getPluginMetadata', this.getPluginMetadataListener);
+
+    //adds current plugin status into plugins
+    this.websocket.socket.on('pluginStatus', this.pluginStatusListener);
+  }
+  
+  /**
+   * websocket listeners
+   */
+  getPluginMetadataListener = this._getPluginMetadataListener.bind(this);
+  _getPluginMetadataListener(data: any) {
+    let keys = Object.keys(data.deps);
+    keys.forEach((key) => {
+      //iff plugin exists in plugins -> override settings
+      let index = this.indexOfPlugin(key);
+      if (index > -1) {
+        this.plugins[index].deps = data.deps[key].dependencies;
+        this.plugins[index].autostart = data.enabled[key];
+        this.plugins[index].switch = data.enabled[key];
+      }
+      //else push new one if not webend (this is the whole system)
+      else if (key !== 'webend') {
+        this.plugins.push({
+          name: key,
+          status: false,
+          autostart: data.enabled[key],
+          switch: data.enabled[key],
+          deps: data.deps[key].dependencies
+        });
+      }
     });
-    
-    /**
-     * adds current plugin status into plugins
-     */
-    this.websocket.socket.on('pluginStatus', (data: any) => {
-      let keys = Object.keys(data);
-      keys.forEach((key) => {
-        //iff plugin exists in plugins -> override settings
-        let index = this.indexOfPlugin(key);
-        if (index > -1) {
-          this.plugins[index].status = data[key];
-        }
-        //else push new one if not webend (this is the whole system)
-        else if (key !== 'webend') {
-          this.plugins.push({
-            name: key,
-            status: data[key],
-            autostart: false,
-            switch: false,
-            deps: {}
-          });
-        }
-      });
-      this.checkDeps();
+    this.checkDeps();
+    this.isAutostartChanged();
+  }
+  
+  pluginStatusListener = this._pluginStatusListener.bind(this);
+  _pluginStatusListener(data: any) {
+    let keys = Object.keys(data);
+    keys.forEach((key) => {
+      //iff plugin exists in plugins -> override settings
+      let index = this.indexOfPlugin(key);
+      if (index > -1) {
+        this.plugins[index].status = data[key];
+      }
+      //else push new one if not webend (this is the whole system)
+      else if (key !== 'webend') {
+        this.plugins.push({
+          name: key,
+          status: data[key],
+          autostart: false,
+          switch: false,
+          deps: {}
+        });
+      }
     });
+    this.checkDeps();
   }
 }
 

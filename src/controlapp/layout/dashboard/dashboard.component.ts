@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, OnDestroy} from 'angular2/core';
 import {Websocket} from '../../services/websocket';
 import {StatusComponent} from '../../helper/status/status.component';
 
@@ -7,7 +7,7 @@ import {StatusComponent} from '../../helper/status/status.component';
   template: require('./dashboard.html'),
   directives: [StatusComponent]
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnDestroy {
   public logs: string;
   public pluginStatus: {[name: string]: boolean} = {};
   public activePlugins: string[] = [];
@@ -17,30 +17,21 @@ export class DashboardComponent {
     this.startRequsts();
   }
   
+  ngOnDestroy() {
+    this.websocket.socket.removeListener('getLogs', this.getLogsListener);
+    this.websocket.socket.removeListener('newLog', this.newLogListener);
+    this.websocket.socket.removeListener('pluginStatus', this.pluginStatusListener);
+  }
+  
   registerWebsocketListener() {
     //get all system logs
-    this.websocket.socket.on('getLogs', (data: string) => {
-      this.logs = data;
-    });
+    this.websocket.socket.on('getLogs', this.getLogsListener);
     
     //on new system logs
-    this.websocket.socket.on('newLog', (data: string) => {
-      this.logs += data;
-    });
+    this.websocket.socket.on('newLog', this.newLogListener);
     
     //change of a plugin status
-    this.websocket.socket.on('pluginStatus', (data: {[name: string]: boolean}) => {
-      this.pluginStatus = data;
-      
-      //evaluate active plugins
-      this.activePlugins = [];
-      let keys = Object.keys(data);
-      keys.forEach((plugin) => {
-        if (data[plugin] && plugin !== 'webend' && data['webend']) {
-          this.activePlugins.push(plugin);
-        }
-      });
-    });
+    this.websocket.socket.on('pluginStatus', this.pluginStatusListener);
   }
   
   /**
@@ -62,6 +53,33 @@ export class DashboardComponent {
   }
   stopPluginSystem() {
     this.websocket.socket.emit('stopPluginSystem');
+  }
+  
+  /**
+   * websocket listeners
+   */
+  pluginStatusListener = this._pluginStatusListener.bind(this);
+  _pluginStatusListener(data: {[name: string]: boolean}) {
+    this.pluginStatus = data;
+    
+    //evaluate active plugins
+    this.activePlugins = [];
+    let keys = Object.keys(data);
+    keys.forEach((plugin) => {
+      if (data[plugin] && plugin !== 'webend' && data['webend']) {
+        this.activePlugins.push(plugin);
+      }
+    });
+  }
+  
+  getLogsListener = this._getLogsListener.bind(this);
+  _getLogsListener(data: string) {
+    this.logs = data;
+  }
+  
+  newLogListener = this._newLogListener.bind(this);
+  _newLogListener(data: string) {
+    this.logs += data;
   }
 }
 
