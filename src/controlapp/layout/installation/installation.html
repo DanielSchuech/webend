@@ -1,0 +1,56 @@
+module.exports = `
+<div>
+  <div class="col-md-6">
+    <div>
+      Here you can install new <span class="std-bold">WebEnd</span>
+      Plugins. The package to be installed has to be a npm module.
+      Its the same process like installing a npm mpodule via npm install (without writing npm install).
+      You can choose between the following sources:
+      <ul>
+        <li>
+          <span class="std-bold">Registry: </span>
+          Simply add the plugin name into the input field! 
+          (Version can be added via @)
+        </li>
+        <li>
+          <span class="std-bold">GIT: </span>
+          Paste the repository url into the input Field!
+          URL has to be in the following form: 
+          &lt;protocol&gt;://[&lt;user&gt;[:&lt;password&gt;]@]&lt;hostname&gt;
+          [:&lt;port&gt;][:][/]&lt;path&gt;[#&lt;commit-ish&gt;]
+        </li>
+        <li>
+          <span class="std-bold">Tarball: </span>
+          Paste a url to the tarball or upload it.
+        </li>  
+      </ul>  
+    </div>
+    <div>
+      <div class="input-group install-select">
+        <select [(ngModel)]="type" class="input-group-addon" 
+          [ngClass]="{'cmd-select': type === 'global', 'up-select': type === 'local'}">
+          <option value="global">npm install</option>
+          <option value="local">upload</option>
+        </select>  
+        <input type="text" class="input-group-addon cmd-input" 
+          [ngClass]="{hide: type !== 'global'}" placeholder="Type Package Name">
+        <input type="file" class="inputfile input-group-addon" [ngClass]="{hide: type !== 'local'}"
+          name="file-1[]" id="file-1" data-multiple-caption="{count} files selected" multiple />
+        <label for="file-1" [ngClass]="{hide: type !== 'local'}" 
+          class="input-group-addon up-input">
+          <span>Click to browse Files</span>
+          <span class="glyphicon glyphicon-folder-open"></span>
+        </label>  
+        <span type="button" class="btn input-group-addon install">Install</span>
+      </div>
+              
+    </div>    
+  </div>
+  <div class="col-md-6">
+    <div class="std-bold">System logs</div>
+    <div><textarea disabled class="form-control log-textarea" 
+      [ngModel]="logs" rows="15">
+        </textarea></div>
+  </div>
+</div> 
+`

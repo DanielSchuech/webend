@@ -34,7 +34,9 @@ module.exports = `
   </div>
   <div class="col-md-6">
     <div class="std-bold">System logs</div>
-    <div><pre class="dashboard-logs">{{logs}}</pre></div>
-  </div> 
+    <div><textarea disabled class="form-control log-textarea" 
+      [ngModel]="logs" rows="15">
+        </textarea></div>
+  </div>
 </div>
 `
