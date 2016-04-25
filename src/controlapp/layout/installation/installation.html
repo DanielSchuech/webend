@@ -25,7 +25,7 @@ module.exports = `
         </li>  
       </ul>  
     </div>
-    <div>
+    <div>{{uploadInput}}
       <div class="input-group install-select">
         <select [(ngModel)]="type" class="input-group-addon" 
           [ngClass]="{'cmd-select': type === 'global', 'up-select': type === 'local'}">
@@ -36,8 +36,8 @@ module.exports = `
           [ngClass]="{hide: type !== 'global'}" placeholder="Type Package Name"
           [(ngModel)]="npmInput">
         <input type="file" class="inputfile input-group-addon" 
-        [ngClass]="{hide: type !== 'local'}" name="file-1[]" id="file-1" 
-        data-multiple-caption="{count} files selected" multiple />
+          [ngClass]="{hide: type !== 'local'}" name="file-1[]" id="file-1" 
+          data-multiple-caption="{count} files selected" multiple />
         <label for="file-1" [ngClass]="{hide: type !== 'local'}" 
           class="input-group-addon up-input">
           <span>Click to browse Files</span>
@@ -45,6 +45,13 @@ module.exports = `
         </label>  
         <span type="button" class="btn input-group-addon install"
           (click)="install()">Install</span>
+      </div>
+      
+      <div class="progress" *ngIf="uploadPercentage">
+        <div class="progress-bar" role="progressbar"
+          [ngStyle]="{width: uploadPercentage + '%'}">
+          {{uploadPercentage}}%
+        </div>
       </div>
               
     </div>    

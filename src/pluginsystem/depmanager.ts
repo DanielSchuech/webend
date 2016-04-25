@@ -28,8 +28,13 @@ export class DependencyManager{
     
     function processNpmList(error: Error, stdout: string, stderr: string) {
       if (error || stderr) {
-        console.log('Error on searching for plugins: '+ error + stderr);
-        return deffered.reject('Error on searching for plugins: '+ error + stderr);
+        if (stderr.indexOf('npm ERR! extraneous:') > -1) {
+          console.log('Warning: extraneous package!');
+          console.log(stderr);
+        } else {
+          console.log('Error on searching for plugins: '+ error + stderr);
+          return deffered.reject('Error on searching for plugins: '+ error + stderr);
+        }        
       }
       let plugins = JSON.parse(stdout).dependencies;
       this.plugins = DependencyManager.filterDependencies(plugins, "^" + config.pluginPrefix);
