@@ -33,15 +33,18 @@ module.exports = `
           <option value="local">upload</option>
         </select>  
         <input type="text" class="input-group-addon cmd-input" 
-          [ngClass]="{hide: type !== 'global'}" placeholder="Type Package Name">
-        <input type="file" class="inputfile input-group-addon" [ngClass]="{hide: type !== 'local'}"
-          name="file-1[]" id="file-1" data-multiple-caption="{count} files selected" multiple />
+          [ngClass]="{hide: type !== 'global'}" placeholder="Type Package Name"
+          [(ngModel)]="npmInput">
+        <input type="file" class="inputfile input-group-addon" 
+        [ngClass]="{hide: type !== 'local'}" name="file-1[]" id="file-1" 
+        data-multiple-caption="{count} files selected" multiple />
         <label for="file-1" [ngClass]="{hide: type !== 'local'}" 
           class="input-group-addon up-input">
           <span>Click to browse Files</span>
           <span class="glyphicon glyphicon-folder-open"></span>
         </label>  
-        <span type="button" class="btn input-group-addon install">Install</span>
+        <span type="button" class="btn input-group-addon install"
+          (click)="install()">Install</span>
       </div>
               
     </div>    

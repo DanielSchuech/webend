@@ -10,12 +10,11 @@ import {DependencyManager} from '../../pluginsystem/depmanager';
 let configFile = path.normalize(__dirname + '/../../pluginsystem/config.json');
 
 export default class Configuration extends TinyDiInjectable {
-  private depManager: DependencyManager;
   
   constructor(server: express.Express, private logger: Logger,
-      private websocket: SocketIO.Server, pluginSystem: PluginSystem) {
+      private websocket: SocketIO.Server, pluginSystem: PluginSystem,
+      private depManager: DependencyManager) {
     super();
-    this.depManager = new DependencyManager();
     this.depManager.initialise();
     
     websocket.on('connection', (socket) => {
@@ -130,6 +129,6 @@ export default class Configuration extends TinyDiInjectable {
   }
 }
 Configuration.$inject = {
-  deps: ['server', 'logger', 'websocket', 'pluginSystem'],
+  deps: ['server', 'logger', 'websocket', 'pluginSystem', 'depManager'],
   callAs: 'class'
 }

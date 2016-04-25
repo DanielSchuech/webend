@@ -8,7 +8,7 @@ import {StatusComponent} from '../../helper/status/status.component';
   directives: [StatusComponent]
 })
 export class DashboardComponent implements OnDestroy {
-  public logs: string;
+  public logs: string = '';
   public pluginStatus: {[name: string]: boolean} = {};
   public activePlugins: string[] = [];
   
@@ -18,14 +18,14 @@ export class DashboardComponent implements OnDestroy {
   }
   
   ngOnDestroy() {
-    this.websocket.socket.removeListener('getLogs', this.getLogsListener);
+    this.websocket.socket.removeListener('getLogs', this.newLogListener);
     this.websocket.socket.removeListener('newLog', this.newLogListener);
     this.websocket.socket.removeListener('pluginStatus', this.pluginStatusListener);
   }
   
   registerWebsocketListener() {
     //get all system logs
-    this.websocket.socket.on('getLogs', this.getLogsListener);
+    this.websocket.socket.on('getLogs', this.newLogListener);
     
     //on new system logs
     this.websocket.socket.on('newLog', this.newLogListener);
@@ -70,11 +70,6 @@ export class DashboardComponent implements OnDestroy {
         this.activePlugins.push(plugin);
       }
     });
-  }
-  
-  getLogsListener = this._getLogsListener.bind(this);
-  _getLogsListener(data: string) {
-    this.logs = data;
   }
   
   newLogListener = this._newLogListener.bind(this);

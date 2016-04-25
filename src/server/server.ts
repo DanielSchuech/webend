@@ -5,6 +5,8 @@ import * as http from 'http';
 import {Logger} from './logger';
 import * as io from 'socket.io';
 
+import {DependencyManager} from '../pluginsystem/depmanager';
+
 export class Daemon {
   private injector: TinyDiInjector;
   private server: express.Express;
@@ -26,12 +28,16 @@ export class Daemon {
     this.httpServer = this.createServer();
     let webSocket = io(this.httpServer);
     
+    //create DependencyManager
+    let depManager = new DependencyManager();
+    
     //link injected variables
     this.injector
       .bind('config').to(config)
       .bind('server').to(this.server)
       .bind('logger').to(this.logger)
-      .bind('websocket').to(webSocket);
+      .bind('websocket').to(webSocket)
+      .bind('depManager').to(depManager);
       
     //load extensions and modules
     this.loadExtensions();

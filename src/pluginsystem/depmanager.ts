@@ -20,6 +20,7 @@ export class DependencyManager{
    * the dep manager will scann all dependencies
    */
   initialise() {
+    this.initialised = false;
     let deffered = q.defer();
     //Buffer max size: 10mb
     var child = child_process.exec('npm ls --json --long', 
