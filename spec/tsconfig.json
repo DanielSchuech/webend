@@ -8,7 +8,7 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": true,
-    "outDir": "build"
+    "outDir": "../buildSpec"
   },
   "exclude": [
     "src/controlapp",
@@ -16,6 +16,6 @@
     "typings/browser",
     "typings/browser.d.ts",
     "build",
-    "spec"
+    "src"
   ]
 }

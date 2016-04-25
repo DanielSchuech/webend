@@ -12,7 +12,8 @@
     "buildControlApp": "npm run controlAppHTML && npm run controlAppLess && npm run controlAppJS",
     "start": "npm run startApp",
     "startApp": "npm run buildServer && node ./build/start.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "testNodeUnit": "npm run buildServer && tsc -p spec && istanbul cover node_modules/jasmine/bin/jasmine.js",
+    "test": "npm run testNodeUnit"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,8 @@
     "browserify": "^13.0.0",
     "copyfiles": "^0.2.1",
     "es6-shim": "^0.35.0",
+    "istanbul": "^0.4.3",
+    "jasmine": "^2.4.1",
     "less": "^2.6.1",
     "reflect-metadata": "^0.1.2",
     "rxjs": "^5.0.0-beta.2",
