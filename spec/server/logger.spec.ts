@@ -1,7 +1,7 @@
 ///<reference path="../../typings/main.d.ts" />
 import {Logger} from '../../build/server/logger';
 
-describe("Server - Logger:", () => {
+describe('Server - Logger:', () => {
   let logger: Logger;
   
   beforeEach(() => {

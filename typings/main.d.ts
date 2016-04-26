@@ -3,6 +3,7 @@
 /// <reference path="main/ambient/jasmine/index.d.ts" />
 /// <reference path="main/ambient/mime/index.d.ts" />
 /// <reference path="main/ambient/node/index.d.ts" />
+/// <reference path="main/ambient/proxyquire/index.d.ts" />
 /// <reference path="main/ambient/q-io/index.d.ts" />
 /// <reference path="main/ambient/q/index.d.ts" />
 /// <reference path="main/ambient/serve-static/index.d.ts" />

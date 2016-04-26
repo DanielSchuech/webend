@@ -1,9 +1,8 @@
 import TinyDiInjectable from '../tinydiinjectable';
-import * as express from 'express';
 import * as fs from 'q-io/fs';
-import *as path from 'path';
+import * as path from 'path';
 import {Logger} from '../logger';
-import PluginSystem from '../extensions/pluginsystem'
+import PluginSystem from '../extensions/pluginsystem';
 
 import {DependencyManager} from '../../pluginsystem/depmanager';
 
@@ -11,9 +10,8 @@ let configFile = path.normalize(__dirname + '/../../pluginsystem/config.json');
 
 export default class Configuration extends TinyDiInjectable {
   
-  constructor(server: express.Express, private logger: Logger,
-      private websocket: SocketIO.Server, pluginSystem: PluginSystem,
-      private depManager: DependencyManager) {
+  constructor(private logger: Logger, private websocket: SocketIO.Server, 
+      pluginSystem: PluginSystem, private depManager: DependencyManager) {
     super();
     this.depManager.initialise();
     
@@ -88,7 +86,7 @@ export default class Configuration extends TinyDiInjectable {
   }
   
   readConfigFile() {
-    return fs.read(configFile).then((data: any) => {return JSON.parse(data);}, 
+    return fs.read(configFile).then((data: any) => {return JSON.parse(data); }, 
       (err: any) => {
         this.logger.log('Error on reading Config File!');
         this.logger.log(err);
@@ -97,7 +95,7 @@ export default class Configuration extends TinyDiInjectable {
   
   writeConfigFile(config: any) {
     return fs.write(configFile, JSON.stringify(config, null , 2)).then(
-      (data: any) => {return data;}, 
+      (data: any) => {return data; }, 
       (err: any) => {
         this.logger.log('Error on writing Config File!');
         this.logger.log(err);
@@ -122,13 +120,13 @@ export default class Configuration extends TinyDiInjectable {
   }
   
   savePluginConfig(plugin: string, pluginConfig: any) {
-    return this.readConfigFile().then((config: any)=> {
+    return this.readConfigFile().then((config: any) => {
       config.plugins[plugin] = pluginConfig;
       return this.writeConfigFile(config);
     });
   }
 }
 Configuration.$inject = {
-  deps: ['server', 'logger', 'websocket', 'pluginSystem', 'depManager'],
+  deps: ['logger', 'websocket', 'pluginSystem', 'depManager'],
   callAs: 'class'
-}
+};

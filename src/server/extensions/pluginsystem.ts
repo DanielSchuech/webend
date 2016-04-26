@@ -6,12 +6,12 @@ import * as http from 'http';
 import * as socket from 'socket.io';
 import {Logger} from '../logger';
 
-export default class PluginSystem extends TinyDiInjectable{
+export default class PluginSystem extends TinyDiInjectable {
   private child: child_process.ChildProcess;
   private pluginStatus: {[name: string]: boolean};
   private systemSocket: SocketIO.Server;
   
-  constructor(private config:any, private logger: Logger, 
+  constructor(private config: any, private logger: Logger, 
       private websocket: SocketIO.Server) {
     super();
     
@@ -53,8 +53,8 @@ export default class PluginSystem extends TinyDiInjectable{
     this.logger.log('Starting Plugin System.............');
     let file = path.normalize(__dirname + '/../../pluginsystem/system.js');
     this.child = child_process.spawn('node', [file]);
-    this.child.stdout.on('data', (data: any) => {this.logger.log(`${data}`)});
-    this.child.stderr.on('data', (data: any) => {this.logger.log(`${data}`)});
+    this.child.stdout.on('data', (data: any) => {this.logger.log(`${data}`); });
+    this.child.stderr.on('data', (data: any) => {this.logger.log(`${data}`); });
   }
   
   
@@ -99,6 +99,9 @@ export default class PluginSystem extends TinyDiInjectable{
   }
   
   resetAllPluginStatus() {
+    if (!this.pluginStatus) {
+      return;
+    }
     let keys = Object.keys(this.pluginStatus);
     keys.forEach((key) => {
       this.pluginStatus[key] = false;
@@ -108,4 +111,4 @@ export default class PluginSystem extends TinyDiInjectable{
 PluginSystem.$inject = {
   deps: ['config', 'logger', 'websocket'],
   callAs: 'class'
-}
+};

@@ -1,6 +1,6 @@
 import TinyDiInjectable from '../tinydiinjectable';
 import {Logger} from '../logger';
-import PluginSystem from '../extensions/pluginsystem'
+import PluginSystem from '../extensions/pluginsystem';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 
@@ -32,8 +32,8 @@ export default class Installation extends TinyDiInjectable {
     }
     
     let params = npmPackage.split(' ');
-    params.unshift('install');
     params.unshift('--save');
+    params.unshift('install');
     
     //spawn ignores PATHEXT on windows -> use cmd
     //https://github.com/nodejs/node-v0.x-archive/issues/2318
@@ -43,8 +43,8 @@ export default class Installation extends TinyDiInjectable {
     }
     
     let child = child_process.spawn('npm', params, options);
-    child.stdout.on('data', (data: any) => {this.logger.log(`${data}`)});
-    child.stderr.on('data', (data: any) => {this.logger.log(`${data}`)});
+    child.stdout.on('data', (data: any) => {this.logger.log(`${data}`); });
+    child.stderr.on('data', (data: any) => {this.logger.log(`${data}`); });
     
     child.on('close', (code: number) => {
       if (code === 0) {
@@ -64,9 +64,9 @@ export default class Installation extends TinyDiInjectable {
       let name = data['name'];
       this.files[name] = {  //Create a new Entry in The Files Variable
         fileSize : data['size'],
-        data     : "",
+        data     : '',
         downloaded : 0
-      }
+      };
       let place = 0;
       try {
         let stat = fs.statSync('tmp/' +  name);
@@ -74,8 +74,7 @@ export default class Installation extends TinyDiInjectable {
           this.files[name]['downloaded'] = stat.size;
           place = stat.size / 524288;
         }
-      }
-      catch (er) {} //It's a New File
+      } catch (er) {} //It's a New File
       fs.open('tmp/' + name, 'a', '0755', (err, fd) => {
         if (err) {
           console.log(err);
@@ -95,16 +94,15 @@ export default class Installation extends TinyDiInjectable {
       //If File is Fully Uploaded
       if (this.files[name]['downloaded'] === this.files[name]['fileSize']) {
         fs.write(this.files[name]['handler'], this.files[name]['data'], null, 
-          'Binary', (err, Writen) => {
+          'Binary', (err, writen) => {
             socket.emit('uploadDone', data.name);
             this.installListener('tmp/' + data.name);
         });
-      }
-      //If the Data Buffer reaches 10MB
-      else if (this.files[name]['data'].length > 10485760) {
+      } else if (this.files[name]['data'].length > 10485760) {
+        //If the Data Buffer reaches 10MB
         fs.write(this.files[name]['handler'], this.files[name]['data'], null, 
-          'Binary', (err, Writen) => {
-            this.files[name]['data'] = ""; //Reset The Buffer
+          'Binary', (err, writen) => {
+            this.files[name]['data'] = ''; //Reset The Buffer
             let place = this.files[name]['downloaded'] / 524288;
             let percent = (this.files[name]['downloaded'] / 
               this.files[name]['fileSize']) * 100;

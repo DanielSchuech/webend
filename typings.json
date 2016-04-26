@@ -8,6 +8,7 @@
     "jasmine": "registry:dt/jasmine#2.2.0+20160412134438",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
     "node": "registry:dt/node#4.0.0+20160412142033",
+    "proxyquire": "registry:dt/proxyquire#1.3.0+20160316155526",
     "q": "registry:dt/q#0.0.0+20160323171452",
     "q-io": "registry:dt/q-io#0.0.0+20160317120654",
     "serve-static": "registry:dt/serve-static#1.7.1+20160104095738",
