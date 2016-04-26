@@ -58,7 +58,11 @@ export var childProcessMock: any = {
       },
       kill: () => {}
     };
-  }
+  },
+  exec: (cmd: string, options: any, fn: Function) => {
+    fn(...childProcessMock.execFnArgs);
+  },
+  execFnArgs: []
 };
 
 export class PluginSystemMock {

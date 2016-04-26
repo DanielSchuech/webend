@@ -45,7 +45,7 @@ export class System {
     this.changePluginStatus('webend', true);
     
     let keys = Object.keys(deps);
-    keys.forEach(function(plugin: string) {
+    keys.forEach((plugin: string) => {
       //only start plugins which are enabled
       if (config.enabled[plugin]) {
         this.startPlugin(plugin);
@@ -53,7 +53,7 @@ export class System {
         this.changePluginStatus(plugin, false);
       }
       
-    }.bind(this));
+    });
   }
   
   /**

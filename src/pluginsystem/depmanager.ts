@@ -6,7 +6,7 @@ let config = require('../config.json');
 /**
  * The dependency manager will hold all dependencies to webend plugins
  */
-export class DependencyManager{
+export class DependencyManager {
   private plugins: any = {};
   private initialised: boolean = false;
    
@@ -23,21 +23,22 @@ export class DependencyManager{
     this.initialised = false;
     let deffered = q.defer();
     //Buffer max size: 10mb
-    var child = child_process.exec('npm ls --json --long', 
+    child_process.exec('npm ls --json --long',
       {maxBuffer: 1024 * 10000}, processNpmList.bind(this));
     
     function processNpmList(error: Error, stdout: string, stderr: string) {
       if (error || stderr) {
-        if (stderr.indexOf('npm ERR! extraneous:') > -1) {
+        if (stderr && stderr.indexOf('npm ERR! extraneous:') > -1) {
           console.log('Warning: extraneous package!');
           console.log(stderr);
         } else {
-          console.log('Error on searching for plugins: '+ error + stderr);
-          return deffered.reject('Error on searching for plugins: '+ error + stderr);
+          console.log('Error on searching for plugins: ' + error + stderr);
+          return deffered.reject('Error on searching for plugins: ' + error + stderr);
         }        
       }
       let plugins = JSON.parse(stdout).dependencies;
-      this.plugins = DependencyManager.filterDependencies(plugins, "^" + config.pluginPrefix);
+      this.plugins = 
+        DependencyManager.filterDependencies(plugins, '^' + config.pluginPrefix);
       
       this.initialised = true;
       deffered.resolve(this.plugins);
@@ -53,9 +54,9 @@ export class DependencyManager{
     if (!json || json === {}) {
       return {};
     }
-    var pattern = new RegExp(regexString);
-    var returnJson: any = {};
-    var keys = Object.keys(json);
+    let pattern = new RegExp(regexString);
+    let returnJson: any = {};
+    let keys = Object.keys(json);
     keys.forEach(function(entry) {
       if (pattern.test(entry)) {
         returnJson[entry] = json[entry];

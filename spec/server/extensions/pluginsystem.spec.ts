@@ -1,7 +1,7 @@
 ///<reference path="../../../typings/main.d.ts" />
 import PluginSystem from '../../../build/server/extensions/pluginsystem';
 import {LoggerMock, WebSocketMock, childProcessMock} from '../../support/servermocks';
-  import * as proxyquire from 'proxyquire';
+import * as proxyquire from 'proxyquire';
 let config: any = {server: {SysComPort: 5056}};
 
 let psSocket: WebSocketMock;
