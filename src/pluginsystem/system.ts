@@ -31,7 +31,7 @@ export class System {
     
     console.log('Starting plugins........');
     if (!this.depManager.isInitialised()) {
-      this.depManager.initialise().then(this.loadPlugins.bind(this))
+      this.depManager.initialise().then(this.loadPlugins.bind(this));
     } else {
       this.loadPlugins(this.depManager.getPlugins());
     }
@@ -91,11 +91,12 @@ export class System {
       }
       
       //load and start plugin
-      let module = this.pluginInjector.bind(plugin).load(plugin);
+      this.pluginInjector.bind(plugin).load(plugin);
       
       this.changePluginStatus(plugin, true);
       return true;
     } catch (e) {
+      this.changePluginStatus(plugin, false);
       console.log('Could not load plugin: ' + plugin);
       console.log(e);
       return false;
@@ -121,11 +122,9 @@ export class System {
         }
       } else {
         // plugin has already tried to start or is disabled in config
-        if (!this.status[key]) {
-          console.log('Plugin ' + plugin + ' requires dependency ' + key + 
-            ' which couldnt be loaded or is deactivated -> activate it!');
-          allPluginsLoaded = false;
-        }
+        console.log('Plugin ' + plugin + ' requires dependency ' + key + 
+          ' which couldnt be loaded or is deactivated -> activate it!');
+        allPluginsLoaded = false;
       }
     });
     return allPluginsLoaded;
@@ -137,7 +136,7 @@ export class System {
    *  -> can only resolve classes which are exported as default
    */
   dependencyResolver(moduleId: string) {
-    var modulePath = path.join(__dirname, moduleId);
+    let modulePath = path.join(__dirname, moduleId);
     try {
       return commonOrDefaultExport(require(modulePath));
     } catch (e) {
