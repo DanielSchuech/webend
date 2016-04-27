@@ -122,9 +122,11 @@ export class System {
         }
       } else {
         // plugin has already tried to start or is disabled in config
-        console.log('Plugin ' + plugin + ' requires dependency ' + key + 
-          ' which couldnt be loaded or is deactivated -> activate it!');
-        allPluginsLoaded = false;
+        if (!this.status[key]) {
+          console.log('Plugin ' + plugin + ' requires dependency ' + key + 
+            ' which couldnt be loaded or is deactivated -> activate it!');
+          allPluginsLoaded = false;
+        }
       }
     });
     return allPluginsLoaded;

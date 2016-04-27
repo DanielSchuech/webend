@@ -210,6 +210,21 @@ describe('PluginSystem - System:', () => {
     expect(success).toBeTruthy();
   });
   
+  it('loadDependencies -> dep already loaded', () => {
+    let scope = {
+      status: {a: true},
+      startPlugin: () => {return true; }
+    };
+    let deps = {
+      a: {}
+    };
+    spyOn(scope, 'startPlugin').and.callThrough();
+    let success = system.prototype.loadDependencies.bind(scope)(deps, 'my');
+    expect(success).toBeTruthy();
+    expect(scope.startPlugin).not.toHaveBeenCalled();
+    expect(console.log).not.toHaveBeenCalled();
+  });
+  
   it('changePluginStatus', () => {
     let scope: any = {
       status: {},
