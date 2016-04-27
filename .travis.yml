@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - "5"
+  
+before_script:
+  - typings install
+  - git reset --hard HEAD
+  - npm i codeclimate-test-reporter
+  
+addons:
+  code_climate:
+    repo_token: 504e68d1456ba37bd7fcadea79d0548f6b5bb7235bf0bde1e08842ff5d5b057f
+
+after_script:
+  - codeclimate-test-reporter < log/coverage/lcov.info

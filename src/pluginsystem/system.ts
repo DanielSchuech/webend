@@ -85,7 +85,7 @@ export class System {
        * frontend only plugin(no main attribute in package.json) 
        * cannot be required in backend
        */
-      if (!dependencies[plugin].main) {
+      if (!dependencies[plugin].main && !dependencies[plugin].missing) {
         this.changePluginStatus(plugin, true);
         return true;
       }
