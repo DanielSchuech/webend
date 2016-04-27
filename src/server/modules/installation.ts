@@ -3,6 +3,7 @@ import {Logger} from '../logger';
 import PluginSystem from '../extensions/pluginsystem';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
+import Configuration from './configuration';
 
 import {DependencyManager} from '../../pluginsystem/depmanager';
 
@@ -10,7 +11,8 @@ export default class Installation extends TinyDiInjectable {
   private files: any = {}; //Files that are currently uploading
   
   constructor(private websocket: SocketIO.Server, private logger: Logger,
-      private pluginSystem: PluginSystem, private depManager: DependencyManager) {
+      private pluginSystem: PluginSystem, private depManager: DependencyManager,
+      private configuration: Configuration) {
     super();
     
     websocket.on('connection', (socket) => {
@@ -48,10 +50,7 @@ export default class Installation extends TinyDiInjectable {
     
     child.on('close', (code: number) => {
       if (code === 0) {
-        //Installation successful
-        this.logger.log(`Installation of ${npmPackage} succesfully completed`);
-        this.pluginSystem.restart();
-        this.depManager.initialise();
+        this.mergeConfigs();
       } else {
         //Installation failed
         this.logger.log(`Installation failed with Error Code: ${code}`);
@@ -118,8 +117,76 @@ export default class Installation extends TinyDiInjectable {
     };  
   }
   
+  mergeConfigs() {
+    return this.depManager.initialise()
+      .then(this.objectToArray)
+      .then(this.checkConfigsforAllDeps.bind(this))
+      .then(successInstallation.bind(this), failedInstallation.bind(this));
+    
+    function successInstallation() {
+      this.logger.log(`Installation succesfully completed`);
+      this.pluginSystem.restart();
+      this.depManager.initialise();
+    }
+    function failedInstallation(err: any) {
+      this.logger.log(`Installation failed`);
+      this.logger.log(err);
+    }
+  }
+  
+  checkConfigsforAllDeps(deps: any[]): Q.Promise<any> {
+    if (deps.length === 0) {
+      return;
+    }
+    let pluginPackage = deps.shift();
+    if (pluginPackage.webendConfig) {
+      //config object for plugin available
+      return this.mergeConfigForPlugin(pluginPackage.name, pluginPackage.webendConfig)
+        .then(() => {
+          return this.checkConfigsforAllDeps(deps);
+        });
+    }
+    //else: no config object defined by developer -> success
+    return this.checkConfigsforAllDeps(deps);
+  }
+  
+  mergeConfigForPlugin(plugin: string, config: any) {
+    return this.configuration.readConfigFile().then((conf: any) => {
+      if (config && !conf.plugins[plugin]) {
+        conf.plugins[plugin] = {};
+      }
+      this.assignConfigToDefault(config, conf.plugins[plugin]);
+      conf.plugins[plugin] = config;
+      return this.configuration.writeConfigFile(conf);
+    });
+  }
+  
+  assignConfigToDefault(def: any, my: any) {
+    if (!def || !my) {
+      return;
+    }
+    let keys = Object.keys(def);
+    keys.forEach((key) => {
+      if (my[key]) {
+        if (typeof def[key] === 'object') {
+          this.assignConfigToDefault(def[key], my[key]);
+        } else {
+          def[key] = my[key];
+        }
+      }
+    });
+  }
+  
+  objectToArray(object: any) {
+    let array: any[] = [];
+    let keys = Object.keys(object);
+    keys.forEach((key) => {
+      array.push(object[key]);
+    });
+    return array;
+  }
 }
 Installation.$inject = {
-  deps: ['websocket', 'logger', 'pluginSystem', 'depManager'],
+  deps: ['websocket', 'logger', 'pluginSystem', 'depManager', 'configuration'],
   callAs: 'class'
 };

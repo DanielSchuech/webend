@@ -1,0 +1,19 @@
+{
+  "name": "webend_install",
+  "version": "1.0.0",
+  "description": "test package for installation",
+  "keywords": [],
+  "author": {
+    "name": "Daniel Schuech",
+    "email": "dschuech@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DanielSchuech",
+  "devDependencies": {},
+  "dependencies": {
+  },
+  "webendConfig": {
+    "port": "3000",
+    "testConf": "Hello World"
+  }
+}
