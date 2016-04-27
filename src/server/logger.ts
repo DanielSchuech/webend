@@ -5,10 +5,7 @@ export class Logger {
   log(s: string) {
     //remove existing new lines and add only one
     s = this.removeNewLines(s) + '\n';
-    
-    //add date
-    let date = new Date().toLocaleString();
-    s = date + ': ' + s;
+    s = this.addDate(s);
     
     this.history += s;
     this.fireAllListener(s);
@@ -30,5 +27,10 @@ export class Logger {
   
   removeNewLines(s: string) {
     return s.replace(/(\n|\r)+$/, '');
+  }
+  
+  addDate(s: string) {
+    let date = new Date().toLocaleString();
+    return date + ': ' + s;
   }
 }

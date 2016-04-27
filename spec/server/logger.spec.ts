@@ -6,21 +6,23 @@ describe('Server - Logger:', () => {
   
   beforeEach(() => {
     logger = new Logger();
+    //Dont add date in tests
+    logger.addDate = (s: string) => {return s; }
   });
   
   it('adds log to history', () => {
     logger.log('abc');
-    expect(removeDate(logger.getHistory())).toEqual('abc\n');
+    expect(logger.getHistory()).toEqual('abc\n');
   });
   
   it('removes multiple new line at end', () => {
     logger.log('abc\n\n\n');
-    expect(removeDate(logger.getHistory())).toEqual('abc\n')
+    expect(logger.getHistory()).toEqual('abc\n')
   });
   
   it('calls added listener', (done) => {
     function testFn(s: string) {
-      expect(removeDate(s)).toEqual('abc\n');
+      expect(s).toEqual('abc\n');
       done();
     }
     logger.addListener(testFn);
@@ -28,7 +30,3 @@ describe('Server - Logger:', () => {
   });
   
 });
-
-function removeDate(s: string) {
-  return s.substring(21, s.length);
-}
