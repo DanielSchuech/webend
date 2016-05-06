@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from 'angular2/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Websocket} from '../../services/websocket';
 import {StatusComponent} from '../../helper/status/status.component';
 

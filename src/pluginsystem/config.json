@@ -1,5 +1,6 @@
 {
   "enabled": {
+    "webend_hub": true,
     "webend_server": false,
     "webend_testpage": false
   },
@@ -11,6 +12,10 @@
         "a": "very interesting!",
         "b": ["abc", 123]
       }
+    },
+    "webend_hub": {
+      "port": 3001,
+      "pathToNodeModules": "../node_modules/"
     }
   }
 }

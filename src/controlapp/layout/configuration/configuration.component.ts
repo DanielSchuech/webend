@@ -1,6 +1,6 @@
-import {Component, OnInit, OnDestroy} from 'angular2/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Websocket} from '../../services/websocket';
-import {RouteParams} from 'angular2/router';
+import {RouteParams} from '@angular/router-deprecated';
 
 @Component({
   selector: 'configuration',

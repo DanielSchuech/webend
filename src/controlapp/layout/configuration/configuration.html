@@ -17,7 +17,7 @@ module.exports = `
           <td>Author</td>
           <td>
             <ul>
-              <li *ngFor="#author of data.info.author">
+              <li *ngFor="let author of data.info.author">
                 {{author}}
               </li>  
             </ul>
@@ -41,7 +41,7 @@ module.exports = `
         <tr>
           <th colspan="2">Configuration</th>
         </tr>
-        <tr *ngFor="#config of data.config" 
+        <tr *ngFor="let config of data.config" 
           [ngClass]="{'webend-warning': config.invalid}">
           <td>{{config.key}}</td>
           <td>

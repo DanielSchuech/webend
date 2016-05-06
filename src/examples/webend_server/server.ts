@@ -15,7 +15,7 @@ export default class Server extends TinyDiInjectable {
     injector.bind('webend_server_app').to(app);
     
     let server = app.listen(config.port);
-    console.log('started on '+config.port)
+    console.log('started on ' + config.port);
   }
 }
 Server.$inject = {

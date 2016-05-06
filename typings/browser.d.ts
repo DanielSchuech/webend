@@ -1,4 +1,4 @@
-/// <reference path="../node_modules/angular2/typings/browser.d.ts" />
+/// <reference path="browser/ambient/es6-shim/index.d.ts" />
 /// <reference path="browser/ambient/express-serve-static-core/index.d.ts" />
 /// <reference path="browser/ambient/express/index.d.ts" />
 /// <reference path="browser/ambient/jasmine/index.d.ts" />

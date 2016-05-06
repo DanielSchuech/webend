@@ -9,7 +9,7 @@ module.exports = `
         <th>Configurate</th>
         <th>Warning</th>
       </tr>
-      <tr *ngFor="#plugin of plugins" [ngClass]="{'webend-warning': plugin.warning}">
+      <tr *ngFor="let plugin of plugins" [ngClass]="{'webend-warning': plugin.warning}">
         <td>{{plugin.name}}</td>
         <td><webend-status [status]="plugin.status"></webend-status></td>
         <td>

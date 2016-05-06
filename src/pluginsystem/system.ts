@@ -41,6 +41,9 @@ export class System {
    * loads all plugins given as dependencies
    */
   loadPlugins(deps: any) {
+    //bind deps for pluginSystem
+    this.pluginInjector.bind('dependencies').to(deps);
+    
     //plugins are not loaded but system is ready!
     this.changePluginStatus('webend', true);
     
@@ -91,10 +94,14 @@ export class System {
       }
       
       //load and start plugin
-      this.pluginInjector.bind(plugin).load(plugin);
-      
-      this.changePluginStatus(plugin, true);
-      return true;
+      let success = this.pluginInjector.bind(plugin).load(plugin);
+      if (!success) {
+        this.changePluginStatus(plugin, false);
+        return false;
+      } else {
+        this.changePluginStatus(plugin, true);
+        return true;
+      }
     } catch (e) {
       this.changePluginStatus(plugin, false);
       console.log('Could not load plugin: ' + plugin);
@@ -138,19 +145,13 @@ export class System {
    *  -> can only resolve classes which are exported as default
    */
   dependencyResolver(moduleId: string) {
-    let modulePath = path.join(__dirname, moduleId);
     try {
-      return commonOrDefaultExport(require(modulePath));
-    } catch (e) {
-      try {
-        return commonOrDefaultExport(require(moduleId));
-      } catch (e2) {
-        console.log('Plugin ' + moduleId + ' failed to load');
-        console.log(modulePath);
-        console.log('errors', e, e2);
-        console.log(new Error().stack);
-        return false;
-      }
+      return commonOrDefaultExport(require(moduleId));
+    } catch (e2) {
+      console.log('Plugin ' + moduleId + ' failed to load');
+      console.log('errors', e2);
+      console.log(new Error().stack);
+      return false;
     }
   }
   

@@ -1,8 +1,8 @@
-import {Component, OnDestroy} from 'angular2/core';
+import {Component, OnDestroy} from '@angular/core';
 import {StatusComponent} from '../../helper/status/status.component';
 import {SwitchComponent} from '../../helper/switch/switch.component';
 import {Websocket} from '../../services/websocket';
-import {ROUTER_DIRECTIVES} from 'angular2/router';
+import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 @Component({
   selector: 'manage',

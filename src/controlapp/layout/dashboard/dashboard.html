@@ -26,7 +26,7 @@ module.exports = `
         <td>Running Plugins:</td>
         <td>
           <ul>
-            <li *ngFor="#item of activePlugins">{{item}}</li>
+            <li *ngFor="let item of activePlugins">{{item}}</li>
           </ul>  
         </td>
       </tr>
