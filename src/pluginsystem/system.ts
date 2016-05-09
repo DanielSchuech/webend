@@ -11,6 +11,7 @@ export class System {
   private status: {[name: string]: boolean} = {};
   private depManager: DependencyManager;
   private pluginInjector: Injector;
+  private manualStartListener: Function[] = [];
   
   constructor() {
     this.depManager = new DependencyManager();
@@ -26,6 +27,9 @@ export class System {
     this.pluginInjector.bind('injector').to(this.pluginInjector);
     this.pluginInjector.bind('status').to(this.status);
     this.pluginInjector.bind('config').to(config.plugins);
+    this.pluginInjector.bind('autostart').to(config.enabled);
+    this.pluginInjector.bind('addManualStartListener')
+      .to(this.addManualStartListener.bind(this));
     this.pluginInjector.setResolver(this.dependencyResolver);
     
     
@@ -106,6 +110,7 @@ export class System {
       this.changePluginStatus(plugin, false);
       console.log('Could not load plugin: ' + plugin);
       console.log(e);
+      console.log(e.stack);
       return false;
     }
     
@@ -162,6 +167,21 @@ export class System {
   changePluginStatus(plugin: string, status: boolean) {
     this.status[plugin] = status;
     this.socket.changedStatus(this.status);
+  }
+  
+  /**
+   * manually start of an plugin thourgh an event received by the socket
+   * start plugin and inform plugins
+   */
+  manualStart(plugin: string) {
+    this.startPlugin(plugin);
+    this.manualStartListener.forEach((fn) => {
+      fn(plugin);
+    });
+  }
+  
+  addManualStartListener(fn: Function) {
+    this.manualStartListener.push(fn);
   }
   
 }

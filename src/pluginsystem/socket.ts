@@ -29,7 +29,7 @@ export class Socket {
     
     //start of a specfic plugin
     this.socket.on('startPlugin', (plugin: string) => {
-      this.system.startPlugin(plugin);
+      this.system.manualStart(plugin);
     });
   }
   
