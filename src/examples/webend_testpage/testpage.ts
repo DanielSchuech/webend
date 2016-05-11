@@ -1,4 +1,4 @@
-import TinyDiInjectable from '../../server/tinydiinjectable';
+import TinyDiInjectable from './tinydiinjectable';
 import * as express from 'express';
 
 export default class Testpage extends TinyDiInjectable {

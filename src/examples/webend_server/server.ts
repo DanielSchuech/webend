@@ -1,5 +1,5 @@
 import * as express from 'express';
-import TinyDiInjectable from '../../server/tinydiinjectable';
+import TinyDiInjectable from './tinydiinjectable';
 
 export default class Server extends TinyDiInjectable {
   constructor(_config: any, injector: TinyDiInjector) {
