@@ -5,7 +5,7 @@
   "main": "build/start.js",
   "scripts": {
     "bootstrapFonts": "cd node_modules/bootstrap && copyfiles fonts/* ../../build/controlapp",
-    "buildServer": "tsc && cd src && copyfiles *.json **/*.json **/*.key ../build",
+    "buildServer": "tsc && cd src && copyfiles *.json **/*.json **/**/*.json **/*.key ../build",
     "controlAppHTML": "copyfiles -f src/controlapp/index.html build/controlapp && less",
     "controlAppLess": "lessc src/controlapp/less/main.less build/controlapp/main.css && npm run bootstrapFonts",
     "controlAppJS": "browserify typings/browser.d.ts src/controlapp/boot.ts -p [ tsify --debug ] -d > build/controlapp/bundle.js",
