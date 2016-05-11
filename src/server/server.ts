@@ -17,10 +17,10 @@ export class Daemon {
   private logger: Logger;
   private httpServer: http.Server;
   
-  constructor(usrLogger: Function, private config: any) {
+  constructor(private config: any) {
     //create logger
     this.logger = new Logger();
-    this.logger.addListener(usrLogger);
+    this.logger.addListener(console.log);
     
     //Prepare dependency injection
     this.injector = new Injector();

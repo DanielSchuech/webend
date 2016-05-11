@@ -2,7 +2,7 @@
   "name": "webend",
   "version": "0.0.1",
   "description": "Web App wide Plug-in System",
-  "main": "index.js",
+  "main": "build/start.js",
   "scripts": {
     "bootstrapFonts": "cd node_modules/bootstrap && copyfiles fonts/* ../../build/controlapp",
     "buildServer": "tsc && cd src && copyfiles *.json **/*.json **/*.key ../build",

@@ -13,8 +13,4 @@ try {
   }
 }
 
-serverconf.dist = {
-  'root': process.argv[2] || './'
-};
-
-new Daemon(console.log, serverconf);
+new Daemon(serverconf);
