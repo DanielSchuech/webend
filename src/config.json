@@ -3,6 +3,7 @@
     "port": 8080,
     "modules": [
       {"module": "configuration", "file": "modules/configuration"},
+      {"module": "modules/authentication"},
       {"module": "modules/static"},
       {"module": "modules/logger"},
       {"module": "modules/installation"}
@@ -12,6 +13,8 @@
     ],
     "SysComPort": 5051
   },
+  
+  "privateKeyPath": "build/private.key",
   
   "pluginPrefix": "webend_"
 }

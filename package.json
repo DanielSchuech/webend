@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "bootstrapFonts": "cd node_modules/bootstrap && copyfiles fonts/* ../../build/controlapp",
-    "buildServer": "tsc && cd src && copyfiles *.json **/*.json ../build",
+    "buildServer": "tsc && cd src && copyfiles *.json **/*.json **/*.key ../build",
     "controlAppHTML": "copyfiles -f src/controlapp/index.html build/controlapp && less",
     "controlAppLess": "lessc src/controlapp/less/main.less build/controlapp/main.css && npm run bootstrapFonts",
     "controlAppJS": "browserify typings/browser.d.ts src/controlapp/boot.ts -p [ tsify --debug ] -d > build/controlapp/bundle.js",
@@ -26,10 +26,12 @@
   },
   "homepage": "https://github.com/DanielSchuech/webend#readme",
   "dependencies": {
-    "bootstrap": "^3.3.6",
+    "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "jsonwebtoken": "^6.2.0",
     "q-io": "^1.13.2",
     "socket.io": "^1.4.5",
+    "socketio-jwt": "^4.3.4",
     "tiny-di": "^0.3.2"
   },
   "devDependencies": {
@@ -42,6 +44,7 @@
     "@angular/router": "2.0.0-rc.1",
     "@angular/router-deprecated": "2.0.0-rc.1",
     "@angular/upgrade": "2.0.0-rc.1",
+    "bootstrap": "^3.3.6",
     "browserify": "^13.0.0",
     "copyfiles": "^0.2.1",
     "es6-shim": "^0.35.0",

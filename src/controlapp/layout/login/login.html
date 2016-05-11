@@ -1,0 +1,39 @@
+module.exports = `
+  <div class="row">
+    <div class="column">
+      <div class="login-box">
+        <ul class="header">
+          <li class="title">WebEnd</li>
+          <li>Administration Panel</li>
+        </ul>
+        <table>
+          <tr>
+            <td>
+              Username:
+            </td>
+            <td>
+              <input class="form-control" [(ngModel)]="user">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Password: 
+            </td>
+            <td>
+              <input class="form-control" [(ngModel)]="pass" type="password">
+            </td>
+          </tr>
+          <tr *ngIf="error">
+            <td colspan="2">
+              <div class="danger">Wrong credentials!</div>
+            </td>
+          <tr>
+            <td colspan="2">
+              <button type="button" class="btn btn-default" (click)="login()">Login</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>  
+`;

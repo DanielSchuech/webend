@@ -4,8 +4,12 @@ import * as express from 'express';
 import * as http from 'http';
 import {Logger} from './logger';
 import * as io from 'socket.io';
+import * as bodyParser from 'body-parser';
+import * as fs from 'fs';
 
 import {DependencyManager} from '../pluginsystem/depmanager';
+
+let socketioJwt = require('socketio-jwt');
 
 export class Daemon {
   private injector: TinyDiInjector;
@@ -25,8 +29,15 @@ export class Daemon {
     
     //create express server
     this.server = express();
+    this.server.use(bodyParser.json());
+    this.server.use(bodyParser.urlencoded({ extended: true }));
     this.httpServer = this.createServer();
     let webSocket = io(this.httpServer);
+    webSocket.use(socketioJwt.authorize({
+      secret: fs.readFileSync(config.privateKeyPath, 'utf8'),
+      handshake: true
+    }));
+    
     
     //create DependencyManager
     let depManager = new DependencyManager();
