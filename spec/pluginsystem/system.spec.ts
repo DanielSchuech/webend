@@ -25,7 +25,8 @@ describe('PluginSystem - System:', () => {
         isInitialised: () => {return true; },
         getPlugins: () => {return 'plugins'; }
       },
-      loadPlugins: () => {}
+      loadPlugins: () => {},
+      addManualStartListener: () => {}
     };
     spyOn(scope, 'loadPlugins');
     system.prototype.start.bind(scope)();
@@ -38,7 +39,8 @@ describe('PluginSystem - System:', () => {
         isInitialised: () => {return false; },
         initialise: () => {return {then: (fn: Function) => {fn('test'); }}; }
       },
-      loadPlugins: () => {}
+      loadPlugins: () => {},
+      addManualStartListener: () => {}
     };
     spyOn(scope, 'loadPlugins');
     system.prototype.start.bind(scope)();
@@ -52,7 +54,8 @@ describe('PluginSystem - System:', () => {
     };
     let scope = {
       startPlugin: () => {},
-      changePluginStatus: () => {}
+      changePluginStatus: () => {},
+      pluginInjector: {bind: () => {return {to: () => {}}; }}
     };
     config.enabled = {
       webend_server: true,
@@ -71,7 +74,7 @@ describe('PluginSystem - System:', () => {
       depManager: {getPlugins: () => {return {
         webend_server: {main: 'index.js'}
       }; }},
-      pluginInjector: {bind: () => {return {load: () => {}}; }},
+      pluginInjector: {bind: () => {return {load: () => {return true; }}; }},
       changePluginStatus: () => {},
       loadDependencies: () => {return true; }
     };
