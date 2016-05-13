@@ -14,7 +14,9 @@
       }
     },
     "webend_hub": {
-      "port": 3001
+      "port": 3001,
+      "useCustomIndexHtml": false,
+      "index.html": "<html>\n\t<head>\n\t\t<title>WebEnd Plugin System</title>\n\t</head>\n\t<body>\n\t\t<!--add your directive here -->\n\t\t<script src=\"bundle.js\"></script>\n\t</body>\n</html>\n"
     }
   }
 }

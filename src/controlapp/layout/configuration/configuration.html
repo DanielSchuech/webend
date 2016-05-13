@@ -45,9 +45,11 @@ module.exports = `
           [ngClass]="{'webend-warning': config.invalid}">
           <td>{{config.key}}</td>
           <td>
-            <input *ngIf="!config.object" class="form-control" type="text"
+            <input *ngIf="!config.object && !config.multilineString" 
+              class="form-control" type="text"
               [(ngModel)]="config.value">
-            <textarea *ngIf="config.object" class="form-control" 
+            <textarea *ngIf="config.object || config.multilineString" 
+              class="form-control" 
               [(ngModel)]="config.value" rows="7"
               (blur)="checkTextareaValidity(config)"></textarea>
           </td>

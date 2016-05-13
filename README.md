@@ -137,7 +137,16 @@ A plugin can only contain code of one framework but plugins of different framewo
 be combined and the `ressources can be shared between different frameworks`!
 
 At first we need to connect one (or mulptiple) directives to the document body.
+Therefore we got two different opportunities. 
+The automatic modus is the default one.
 There we have to create a directive which has the plugin name as selector.
+All these directives will be automatically added to the document body.
+The second one is the more configurable modus. 
+There you have to edit the configuration of the webend_hub. 
+Therefore open the controll app, navigate to Management and click on the configure 
+button of the webend_hub.
+There you can set the `useCustomIndexHtml` to true and edit the `index.html`.
+It is fully customizable and you can add your root directive into the body.
 
 Now we want to use ressources of other plugins. 
 We start with an Angular 2 plugin and want to use components, directives and services 

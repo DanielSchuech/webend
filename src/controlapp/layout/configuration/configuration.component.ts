@@ -46,7 +46,9 @@ export class ConfigurationComponent implements OnInit, OnDestroy {
       this.data.config.push({
         key: option,
         value: isObject ? JSON.stringify(config[option], null , 2) : config[option],
-        object: isObject
+        object: isObject,
+        multilineString: (typeof config[option] === 'string' && 
+          config[option].indexOf('\n') !== -1)
       });
     });
   }
@@ -90,7 +92,7 @@ export class ConfigurationComponent implements OnInit, OnDestroy {
       } else {
         try {
           config[setting.key] = JSON.parse(setting.value);
-        } catch(err) {
+        } catch (err) {
           console.log('Error on reading setting ' + setting.name);
           console.log(err);
           valid = false;
@@ -104,11 +106,13 @@ export class ConfigurationComponent implements OnInit, OnDestroy {
   }
   
   checkTextareaValidity(model: any) {
-    try{
-      JSON.parse(model.value);
-      model.invalid = false;
-    } catch(e) {
-      model.invalid = true;
+    if (model.ibject) {
+      try {
+        JSON.parse(model.value);
+        model.invalid = false;
+      } catch (e) {
+        model.invalid = true;
+      }
     }
   }
 }
