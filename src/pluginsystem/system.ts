@@ -98,11 +98,16 @@ export class System {
       }
       
       //load and start plugin
-      let success = this.pluginInjector.bind(plugin).load(plugin);
-      if (!success) {
+      let module = this.pluginInjector.bind(plugin).load(plugin);
+      
+      if (!module) {
         this.changePluginStatus(plugin, false);
         return false;
       } else {
+        if (module.start) {
+          module.start();
+        }
+        
         this.changePluginStatus(plugin, true);
         return true;
       }

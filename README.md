@@ -46,10 +46,16 @@ A plugin is always a npm package. Create one with: `npm init`
 ### 2) NodeJS Backend Part
 The entry point to your backend has to be declared in the `main` field of the package.json.
 The given entry file has to export a function(es5) or per default a class(es6/typescript).
+The constructor will be fired when the plugin will be loaded. 
+So you can put your starting code there. 
+Sometimes some initialisations on the class needs to be done.
+This could be done also in the constructor and you can move your starting code to
+a new start method.
+This start method is optional and will be fired after the class has been created.
 The given entry will be loaded by an dependency injection framework.
 Webend uses [tiny-di](https://www.npmjs.com/package/tiny-di).
 
-Injectables:
+There are the following Injectables available:
 
 Name | Type | Description | Example |
 --- | --- | --- | --- |

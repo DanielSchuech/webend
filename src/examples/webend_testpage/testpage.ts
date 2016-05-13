@@ -2,10 +2,12 @@ import TinyDiInjectable from './tinydiinjectable';
 import * as express from 'express';
 
 export default class Testpage extends TinyDiInjectable {
-  constructor(app: express.Express) {
+  constructor(private app: express.Express) {
     super();
-    
-    app.get('/testpage', (req, res) => {
+  }
+  
+  start() {
+    this.app.get('/testpage', (req, res) => {
       res.send('Testpage');
     });
   }
