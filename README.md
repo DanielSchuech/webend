@@ -39,7 +39,7 @@ Activate the autostart of `webend_hub`.
 
 ## Write a PLUGIN
 ### 1) Instantiate a new npm package
-A plugin is always a npm package. Create one with: `npm init`
+A plugin is always a npm package. Create a new one with: `npm init`
 
 **The plugin name always has to have `webend_` as prefix!**
 
@@ -161,14 +161,14 @@ the additional.
 The entry file is main.ts which looks like:
 ```javascript
 import { Component, Inject } from '@angular/core';
-declare var window: any;
-let MyPageService = window.getService('MyPageService');
+declare var webend: any;
+let MyPageService = webend.getService('MyPageService');
 
 @Component({
   moduleId: module.id,
   selector: 'webend_mypage',
   template: '<span my-highlight>this my page!!!</span> <my-addon></my-addon> {{secret}}',
-  directives: [window.getComponent('my-addon'), window.getDirective('[my-highlight]')],
+  directives: [webend.getComponent('my-addon'), webend.getDirective('[my-highlight]')],
   providers: [MyPageService]
 })
 export class webend_mypageComponent {
@@ -181,7 +181,7 @@ export class webend_mypageComponent {
 The selector for the component is equal to the plugin name so the component will 
 be attached to the document body. To use components or directives in your template we
 have to push them into the directives array. We can't require them because we don't know
-if the plugin is avialable. But we can request a component through window.getComponent.
+if the plugin is avialable. But we can request a component through webend.getComponent.
 This wil lreturn the requested component iff available and otherwise it will return a
 component with empty template. So this will never fail and we can use the component in our 
 template. The same could be done for a directive. The input of the functions are the
@@ -191,12 +191,12 @@ Nearly the same is also available services. Angular 2 has a dependency tree so y
 inject thorugh the providers array. They will automatically added to the root injector 
 that they are available for all plugins.
 
-AngularJS ressources can also be used. Therefore is an adapter defined on the window:
-`window.adapter.* `. Have a look to [ngAdapter](https://github.com/DanielSchuech/ngAdapter) 
+AngularJS ressources can also be used. Therefore is an adapter defined on the webend:
+`webend.adapter.* `. Have a look to [ngAdapter](https://github.com/DanielSchuech/ngAdapter) 
 for usage. Not all AngularJS directives can currently be upgraded! To be able to use optional AngularJS ressources use `getOptNg1Directive` or 
 `getOptNg1Service`. Example:
 ```javascript
-window.adapter.upgradeNg1Directive(window.getOptNg1Directive('myDirective'));
+webend.adapter.upgradeNg1Directive(webend.getOptNg1Directive('myDirective'));
 ```
 
 #### AngularJS
@@ -206,9 +206,9 @@ Lets have a look to an AngularJS plugin (webend_myng1page):
 let mod = angular.module('webend_myng1page', [])
   .directive('webendMyng1page', MyNg1Page);
 
-declare var window: any;
+declare var webend: any;
 
-ctrl.$inject = [window.getOptNg1Service('MyPageService'), '$scope'];
+ctrl.$inject = [webend.getOptNg1Service('MyPageService'), '$scope'];
 function ctrl(MyPageService: any, $scope: any) {
   $scope.secret = MyPageService.secret;
 }
@@ -230,14 +230,14 @@ export default mod;
 ```
 We have to create an AngularJS module with the name of the plugin.
 The controller of the added directive wants to use a optional AngularJS Service. 
-Therfore the Service has be requested thorugh `window.getOptNg1Service`.
+Therfore the Service has be requested thorugh `webend.getOptNg1Service`.
 Thereby it will be secured that the service is always available (but could be empty).
 The directive uses the redLight directive of another plugin.
 This could be defined or not. AngularJS ingores unknown directives so there is no need to
 secure that the directive exists.
 
 It is possible to use Angular2 components, directives and services in an AngularJS plugin.
-Therefore use the window.adapter to downgrade the specific ressource. Have a look to 
+Therefore use the `webend.adapter` to downgrade the specific ressource. Have a look to 
 [ngAdapter](https://github.com/DanielSchuech/ngAdapter) for documentation.
 
 #### Dependencies
@@ -245,7 +245,7 @@ We always talked about optional Dependencies. Thats a new case which I want to b
 If you need plugins as dependency its possible to request them the described way. 
 I would recommend that but it is also possible to use them in the standard native way.
 
-#### Summary: additional functions on window
+#### Summary: additional functions on webend
 
 Name | Return Value | Description
 --- | --- | ---
