@@ -15,6 +15,11 @@ export default class Installation extends TinyDiInjectable {
       private configuration: Configuration) {
     super();
     
+    //check if tmp folder for uploads exists otherwise create it
+    if (!fs.existsSync('tmp/')) {
+      fs.mkdirSync('tmp');
+    }
+    
     websocket.on('connection', (socket) => {
       socket.on('install', this.installListener.bind(this));
       socket.on('fileUploadStart', this.uploadStartListener(socket));
