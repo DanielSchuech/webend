@@ -1,6 +1,6 @@
 {
   "name": "webend",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Web App wide Plug-in System",
   "main": "build/start.js",
   "scripts": {
@@ -32,7 +32,8 @@
     "q-io": "^1.13.2",
     "socket.io": "^1.4.5",
     "socketio-jwt": "^4.3.4",
-    "tiny-di": "^0.3.2"
+    "tiny-di": "^0.3.2",
+    "webend_hub": "^0.1.0"
   },
   "devDependencies": {
     "@angular/common": "2.0.0-rc.1",

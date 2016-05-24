@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/DanielSchuech/webend.svg?branch=master)](https://travis-ci.org/DanielSchuech/webend)
+[![Test Coverage](https://codeclimate.com/github/DanielSchuech/webend/badges/coverage.svg)](https://codeclimate.com/github/DanielSchuech/webend/coverage)
 
 # Everything is a Plugin
 
@@ -63,7 +64,9 @@ injector | tiny-di | The Injector can be used to bind additional instances to th
 status | object | Gets the loading status of the different plugins | status['webend_hub'] -> true |
 autostart | object | Gets the autostart setting of the plugins | autostart['webend_hub'] -> true |
 config | object | contains the configs for all plugins | config['webend_hub'] -> {port: 8080}  |
+hub_server | express.Application | express server of the hub | hub_server.get('/myroute', fn); |
 {pluginName} | object | Gets the instance of an other plugin which has to be a dependency of the current plugin | n.a. |
+
 
 Thats a lot of theory so here is an example:
 ```javascript

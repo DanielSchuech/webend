@@ -1,0 +1,6 @@
+node_modules
+buildSpec
+log
+tmp
+typings
+jsconfig.json
