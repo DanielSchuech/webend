@@ -10,7 +10,7 @@ Support easily different product lines for different customers.
 
 ## Installation
 ```
-npm i -save webend webend_hub
+npm i --save webend webend_hub
 ```
 The system is devided into two parts: `webend` & `webend_hub`. 
 The `webend` will load the NodeJS backend plugins while the `webend_hub` will 
@@ -64,7 +64,6 @@ injector | tiny-di | The Injector can be used to bind additional instances to th
 status | object | Gets the loading status of the different plugins | status['webend_hub'] -> true |
 autostart | object | Gets the autostart setting of the plugins | autostart['webend_hub'] -> true |
 config | object | contains the configs for all plugins | config['webend_hub'] -> {port: 8080}  |
-hub_server | express.Application | express server of the hub | hub_server.get('/myroute', fn); |
 {pluginName} | object | Gets the instance of an other plugin which has to be a dependency of the current plugin | n.a. |
 
 

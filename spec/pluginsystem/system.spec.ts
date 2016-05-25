@@ -158,10 +158,10 @@ describe('PluginSystem - System:', () => {
       status: {},
       startPlugin: () => {return true; }
     };
-    let deps = {
+    let deps = {dependencies: {
       a: {},
       b: {}
-    };
+    }};
     spyOn(scope, 'startPlugin').and.callThrough();
     let success = system.prototype.loadDependencies.bind(scope)(deps, 'my');
     expect(success).toBeTruthy();
@@ -177,10 +177,10 @@ describe('PluginSystem - System:', () => {
         return true; 
       }
     };
-    let deps = {
+    let deps = {dependencies: {
       a: {},
       b: {}
-    };
+    }};
     let success = system.prototype.loadDependencies.bind(scope)(deps, 'my');
     expect(success).toBeFalsy();
   });
@@ -193,10 +193,10 @@ describe('PluginSystem - System:', () => {
         return true; 
       }
     };
-    let deps = {
+    let deps = {dependencies: {
       a: {},
       b: {}
-    };
+    }};
     spyOn(scope, 'startPlugin').and.callThrough();
     let success = system.prototype.loadDependencies.bind(scope)(deps, 'my');
     expect(success).toBeFalsy();
@@ -218,9 +218,9 @@ describe('PluginSystem - System:', () => {
       status: {a: true},
       startPlugin: () => {return true; }
     };
-    let deps = {
+    let deps = {dependencies: {
       a: {}
-    };
+    }};
     spyOn(scope, 'startPlugin').and.callThrough();
     let success = system.prototype.loadDependencies.bind(scope)(deps, 'my');
     expect(success).toBeTruthy();

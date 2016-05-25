@@ -1,6 +1,6 @@
 {
   "name": "webend",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web App wide Plug-in System",
   "main": "build/start.js",
   "scripts": {
@@ -60,13 +60,5 @@
     "typescript": "^1.8.10",
     "typings": "^0.8.1",
     "zone.js": "^0.6.12"
-  },
-  "optionalDependencies": {
-    "webend_server": "0.0.1",
-    "webend_testpage": "0.0.1",
-    "webend_mypageaddon": "1.0.0",
-    "webend_mypageservice": "1.0.0",
-    "webend_myng1pageaddon": "1.0.0",
-    "webend_mypageuseng1": "1.0.0"
   }
 }

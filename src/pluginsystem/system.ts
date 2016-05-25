@@ -77,7 +77,11 @@ export class System {
     
     //check and load dependencies for plugin
     let dependencies = this.depManager.getPlugins();
-    let depsLoaded = this.loadDependencies(dependencies[plugin].dependencies, plugin);
+    if (!dependencies[plugin]) {
+      //tried to start an not installed plugin, this could be an optional dependency
+      return true;
+    }
+    let depsLoaded = this.loadDependencies(dependencies[plugin], plugin);
     if (!depsLoaded) {
       //dependencies not load -> cant start plugin
       console.log('Dependencies coudn\'t be loaded for ' + plugin);
@@ -124,13 +128,13 @@ export class System {
   /**
    * loads all required dependencies of a plugin
    */
-  loadDependencies(dependencies: any, plugin: string) {
-    if (!dependencies || dependencies === {} ) {
+  loadDependencies(dep: any, plugin: string) {
+    if (!dep || !dep.dependencies || dep.dependencies === {} ) {
       return true;
     }
     
     let allPluginsLoaded = true;
-    let keys = Object.keys(dependencies);
+    let keys = Object.keys(dep.dependencies);
     keys.forEach((key) => {
       if (this.status[key] === undefined) {
         let keyLoaded = this.startPlugin(key);
@@ -140,9 +144,14 @@ export class System {
       } else {
         // plugin has already tried to start or is disabled in config
         if (!this.status[key]) {
-          console.log('Plugin ' + plugin + ' requires dependency ' + key + 
-            ' which couldnt be loaded or is deactivated -> activate it!');
-          allPluginsLoaded = false;
+          //check if plugin is optional, new npm version add it also to dependencies if installed
+          if (!dep.optionalDependencies ||
+            Object.keys(dep.optionalDependencies).indexOf(key) === -1 ) {
+              //its not optional -> err
+              console.log('Plugin ' + plugin + ' requires dependency ' + key + 
+                ' which couldnt be loaded or is deactivated -> activate it!');
+              allPluginsLoaded = false;
+            }
         }
       }
     });

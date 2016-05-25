@@ -52,7 +52,8 @@ export class ManageComponent implements OnDestroy {
       let deps = Object.keys(plugin.deps);
       deps.forEach((dep) => {
         let index = this.indexOfPlugin(dep);
-        if (index > -1) {
+        let isOptional = plugin.optDeps && Object.keys(plugin.optDeps).indexOf(dep) !== -1;
+        if (index > -1 && !isOptional) {
           //check loading status
           if (!this.plugins[index].status) {
             this.addStoppedWarning(plugin, this.plugins[index]);
@@ -127,6 +128,7 @@ export class ManageComponent implements OnDestroy {
       let index = this.indexOfPlugin(key);
       if (index > -1) {
         this.plugins[index].deps = data.deps[key].dependencies;
+        this.plugins[index].optDeps = data.deps[key].optionalDependencies;
         this.plugins[index].autostart = data.enabled[key];
         this.plugins[index].switch = data.enabled[key];
       }
@@ -137,7 +139,8 @@ export class ManageComponent implements OnDestroy {
           status: false,
           autostart: data.enabled[key],
           switch: data.enabled[key],
-          deps: data.deps[key].dependencies
+          deps: data.deps[key].dependencies,
+          optDeps: data.deps[key].optionalDependencies
         });
       }
     });
@@ -175,5 +178,6 @@ export interface Plugin {
   autostart: boolean, //autostart enabled
   switch: boolean,    //switch setting for autostart
   deps: any,
+  optDeps?: any,
   warning?: string
 }
