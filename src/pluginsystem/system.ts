@@ -127,6 +127,8 @@ export class System {
   
   /**
    * loads all required dependencies of a plugin
+   * required plugins which are not enabled by autostart will be started
+   * optionale plug-ins not
    */
   loadDependencies(dep: any, plugin: string) {
     if (!dep || !dep.dependencies || dep.dependencies === {} ) {
@@ -147,10 +149,11 @@ export class System {
           //check if plugin is optional, new npm version add it also to dependencies if installed
           if (!dep.optionalDependencies ||
             Object.keys(dep.optionalDependencies).indexOf(key) === -1 ) {
-              //its not optional -> err
-              console.log('Plugin ' + plugin + ' requires dependency ' + key + 
-                ' which couldnt be loaded or is deactivated -> activate it!');
-              allPluginsLoaded = false;
+              //its not optional -> try to start
+              let keyLoaded = this.startPlugin(key);
+              if (!keyLoaded) {
+                allPluginsLoaded = false;
+              }
             }
         }
       }

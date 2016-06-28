@@ -1,6 +1,6 @@
 {
   "name": "webend",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Web App wide Plug-in System",
   "main": "build/start.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "controlAppLess": "lessc src/controlapp/less/main.less build/controlapp/main.css && npm run bootstrapFonts",
     "controlAppJS": "browserify typings/browser.d.ts src/controlapp/boot.ts -p [ tsify --debug ] -d > build/controlapp/bundle.js",
     "buildControlApp": "npm run controlAppHTML && npm run controlAppLess && npm run controlAppJS",
-    "start": "npm run startApp",
+    "build": "npm run buildServer && npm run buildControlApp",
+    "start": "node ./build/start.js",
     "startApp": "npm run buildServer && node ./build/start.js",
     "testNodeUnit": "npm run buildServer && tsc -p spec && istanbul cover node_modules/jasmine/bin/jasmine.js",
     "test": "npm run testNodeUnit"
