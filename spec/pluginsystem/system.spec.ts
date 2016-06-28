@@ -185,25 +185,49 @@ describe('PluginSystem - System:', () => {
     expect(success).toBeFalsy();
   });
   
-  it('loadDependencies -> dep already failed loading', () => {
+  it('loadDependencies -> dep required but deactivated', () => {
+    //status of deactivated deps will be setted to false
+    //required by another plugin -> load
     let scope = {
       status: {b: false},
-      startPlugin: (p: string) => {
-        if (p === 'b') return false;
+      startPlugin: () => {
         return true; 
       }
     };
     let deps = {dependencies: {
-      a: {},
+      a: {dependencies: {b: {}}},
       b: {}
     }};
     spyOn(scope, 'startPlugin').and.callThrough();
     let success = system.prototype.loadDependencies.bind(scope)(deps, 'my');
-    expect(success).toBeFalsy();
+    expect(success).toBeTruthy();
+    expect(scope.startPlugin).toHaveBeenCalledWith('a');
+    expect(scope.startPlugin).toHaveBeenCalledWith('b');
+  });
+
+  it('loadDependencies -> dep optional and deactivated', () => {
+    //dont start deactivated optional deps
+    let scope = {
+      status: {b: false},
+      startPlugin: () => {
+        return true; 
+      }
+    };
+    let deps = {
+      dependencies: {
+        a: {
+          dependencies: {b: {}},
+          optionalDependencies: {b: {}}
+        },
+        b: {}
+      },
+      optionalDependencies: {b: {}}
+    };
+    spyOn(scope, 'startPlugin').and.callThrough();
+    let success = system.prototype.loadDependencies.bind(scope)(deps, 'my');
+    expect(success).toBeTruthy();
     expect(scope.startPlugin).toHaveBeenCalledWith('a');
     expect(scope.startPlugin).not.toHaveBeenCalledWith('b');
-    expect(console.log).toHaveBeenCalledWith('Plugin my requires dependency b' +
-      ' which couldnt be loaded or is deactivated -> activate it!');
   });
   
   it('loadDependencies -> empty deps', () => {
