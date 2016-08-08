@@ -1,16 +1,7 @@
 import {Daemon} from './server/server';
+import * as path from 'path';
+import {getGlobalConfig} from './helper';
 
-let serverconf: any;
-try {
-  serverconf = require(__dirname + '/config.json');
-} catch (e1) {
-  try {
-    serverconf = require(__dirname + '/plugin_system/server/config.json');
-  } catch (e2) {
-    console.error('Config not found');
-    console.error('Exiting...');
-    process.exit(1);
-  }
-}
+let serverconf = getGlobalConfig();
 
 new Daemon(serverconf);

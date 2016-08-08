@@ -1,7 +1,9 @@
 import * as q from 'q';
 import * as child_process from 'child_process';
+import * as path from 'path';
+import {getGlobalConfig} from '../helper';
 
-let config = require('../config.json');
+let config = getGlobalConfig();
 
 /**
  * The dependency manager will hold all dependencies to webend plugins

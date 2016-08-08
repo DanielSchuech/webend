@@ -1,8 +1,8 @@
 ///<reference path="../../typings/main.d.ts" />
 import * as proxyquire from 'proxyquire';
-let config: any = {};
+let config: any = {plugins: {}};
 let system = proxyquire('../../build/pluginsystem/system', {
-  './config': config
+  '../helper': {getPluginConfig: () => {return config; }}
 }).System;
 
 describe('PluginSystem - System:', () => {
@@ -14,6 +14,9 @@ describe('PluginSystem - System:', () => {
   
   it('check injector bindings on startup', () => {
     let module = new system();
+    console.log((<any>module).pluginInjector.get('injector'));
+    console.log((<any>module).pluginInjector.get('status'));
+    console.log((<any>module).pluginInjector.get('config'));
     expect((<any>module).pluginInjector.get('injector')).toBeDefined();
     expect((<any>module).pluginInjector.get('status')).toBeDefined();
     expect((<any>module).pluginInjector.get('config')).toBeDefined();

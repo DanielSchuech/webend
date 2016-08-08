@@ -10,7 +10,7 @@ Support easily different product lines for different customers.
 
 ## Installation
 ```
-npm i --save webend webend_hub
+npm i --save webend
 ```
 The system is devided into two parts: `webend` & `webend_hub`. 
 The `webend` will load the NodeJS backend plugins while the `webend_hub` will 
@@ -22,9 +22,12 @@ Just import the webend package.
 import 'webend';  //require('webend');
 ```
 
+Two config files have been copied to your project root directory while the installation.
+The `config.json` is the configuration for the system and the `pluginconfig.json` the configuration for all plugins.
+
 Before we can start the system we have to configure the path for a secret wich will be used for 
 the encryption of the control page.
-Therefor edit the `node_modules/webend/build/config.json`.
+Therefor edit the `config.json`.
 Change `privateKeyPath` to your local private key. (The file could contain just a string.)
 There you can also change the port of the control page.
 

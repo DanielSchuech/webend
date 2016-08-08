@@ -3,10 +3,11 @@ import * as fs from 'q-io/fs';
 import * as path from 'path';
 import {Logger} from '../logger';
 import PluginSystem from '../extensions/pluginsystem';
+import {getPluginConfigPath} from '../../helper';
 
 import {DependencyManager} from '../../pluginsystem/depmanager';
 
-let configFile = path.normalize(__dirname + '/../../pluginsystem/config.json');
+let configFile = getPluginConfigPath();
 
 export default class Configuration extends TinyDiInjectable {
   

@@ -1,5 +1,8 @@
+import * as path from 'path';
 let socket = require('socket.io-client');
-let config = require('../config');
+import {getGlobalConfig} from '../helper';
+
+let config = getGlobalConfig();
 
 import {System} from './system';
 import * as q from 'q';

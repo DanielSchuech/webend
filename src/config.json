@@ -1,20 +1,10 @@
 {
   "server": {
     "port": 8080,
-    "modules": [
-      {"module": "configuration", "file": "modules/configuration"},
-      {"module": "modules/authentication"},
-      {"module": "modules/static"},
-      {"module": "modules/logger"},
-      {"module": "modules/installation"}
-    ],
-    "extensions": [
-      {"extension": "pluginSystem", "file": "extensions/pluginsystem"}
-    ],
     "SysComPort": 5051
   },
   
-  "privateKeyPath": "build/private.key",
+  "privateKeyPath": "",
   
   "pluginPrefix": "webend_"
 }

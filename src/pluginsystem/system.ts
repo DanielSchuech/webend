@@ -1,10 +1,11 @@
 import {DependencyManager} from './depmanager';
 import Injector = require('tiny-di');
 import * as path from 'path';
+import {getPluginConfig} from '../helper';
 
 import {Socket} from './socket';
 
-let config = require('./config');
+let config = getPluginConfig();
 
 export class System {
   private socket: Socket;

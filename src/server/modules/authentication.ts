@@ -8,10 +8,10 @@ import {Logger} from '../logger';
 let users = require('../../users');
 
 export default class Authentication extends TinyDiInjectable {
-  constructor(server: express.Express, logger: Logger, config: any) {
+  constructor(server: express.Express, logger: Logger, privateKeyPath: string) {
     super();
-    
-    let cert = fs.readFileSync(config.privateKeyPath, 'utf8');
+
+    let cert = fs.readFileSync(privateKeyPath, 'utf8');
     
     server.post('/auth/login', (req, res) => {
       if (users[req.body.username] && users[req.body.username] === req.body.password) {
@@ -39,6 +39,6 @@ export default class Authentication extends TinyDiInjectable {
   }
 }
 Authentication.$inject = {
-  deps: ['server', 'logger', 'config'],
+  deps: ['server', 'logger', 'privateKeyPath'],
   callAs: 'class'
 };

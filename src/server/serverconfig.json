@@ -1,0 +1,13 @@
+{
+  "modules": [
+    {"module": "configuration", "file": "modules/configuration"},
+    {"module": "modules/authentication"},
+    {"module": "modules/static"},
+    {"module": "modules/logger"},
+    {"module": "modules/installation"}
+  ],
+  "extensions": [
+    {"extension": "pluginSystem", "file": "extensions/pluginsystem"}
+  ],
+  "privateKeyFallback": "/../private.key"
+}

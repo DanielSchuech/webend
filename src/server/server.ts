@@ -7,6 +7,8 @@ import * as io from 'socket.io';
 import * as bodyParser from 'body-parser';
 import * as fs from 'fs';
 
+let serverconfig = require('./serverconfig');
+
 import {DependencyManager} from '../pluginsystem/depmanager';
 
 let socketioJwt = require('socketio-jwt');
@@ -24,7 +26,10 @@ export class Daemon {
     
     //Prepare dependency injection
     this.injector = new Injector();
-    this.injector.bind('injector').to(this.injector);
+    this.injector
+      .bind('injector').to(this.injector)
+      .bind('privateKeyPath').to(path.resolve(config.privateKeyPath ||
+        __dirname + serverconfig.privateKeyFallback));
     this.injector.setResolver(this.dependencyResolver.bind(this));
     
     //create express server
@@ -34,10 +39,9 @@ export class Daemon {
     this.httpServer = this.createServer();
     let webSocket = io(this.httpServer);
     webSocket.use(socketioJwt.authorize({
-      secret: fs.readFileSync(config.privateKeyPath, 'utf8'),
+      secret: fs.readFileSync(this.injector.get('privateKeyPath'), 'utf8'),
       handshake: true
     }));
-    
     
     //create DependencyManager
     let depManager = new DependencyManager();
@@ -45,6 +49,7 @@ export class Daemon {
     //link injected variables
     this.injector
       .bind('config').to(config)
+      .bind('serverconfig').to(serverconfig)
       .bind('server').to(this.server)
       .bind('logger').to(this.logger)
       .bind('websocket').to(webSocket)
@@ -77,14 +82,14 @@ export class Daemon {
   }
   
   loadModules() {
-    this.config.server.modules.forEach((module: any) => {
+    serverconfig.modules.forEach((module: any) => {
       let file: string = module.file || module.module;
       this.injector.bind(module.module).load(file);
     });
   }
 
   loadExtensions() {
-    this.config.server.extensions.forEach((extension: any) => {
+    serverconfig.extensions.forEach((extension: any) => {
       let file: string = extension.file || extension.extension;
       this.injector.bind(extension.extension).load(file);
     });
