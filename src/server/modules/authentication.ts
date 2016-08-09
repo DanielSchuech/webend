@@ -4,8 +4,9 @@ import * as jwt from 'jsonwebtoken';
 import * as fs from 'fs';
 import * as path from 'path';
 import {Logger} from '../logger';
+import {getUsers} from '../../helper';
 
-let users = require('../../users');
+let users = getUsers();
 
 export default class Authentication extends TinyDiInjectable {
   constructor(server: express.Express, logger: Logger, privateKeyPath: string) {

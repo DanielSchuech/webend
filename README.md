@@ -31,8 +31,10 @@ Therefor edit the `config.json`.
 Change `privateKeyPath` to your local private key. (The file could contain just a string.)
 There you can also change the port of the control page.
 
-Define a user with a password in `node_modules/webend/build/users.json`.
-These accounts will be able to login into the control app.
+The users that are allowed to login to the control app have to be defined.
+Therefore create a users.json in your project root which contains the username as key
+and the password as value.
+If this file doesn't exists then the default user `admin:admin` will be used.
 
 Now you can start your module!
 

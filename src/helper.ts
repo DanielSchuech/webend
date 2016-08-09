@@ -25,3 +25,15 @@ export function getPluginConfigPath() {
 export function getPluginConfig() {
   return require(getPluginConfigPath());
 }
+
+export function getUsers() {
+  try {
+    return require(path.resolve(process.cwd() + '/users.json'));
+  } catch (e1) {
+    try {
+      return require('./users.json');
+    } catch (e2) {
+      throw Error('User JSON for control app not found!');
+    }
+  }
+}
