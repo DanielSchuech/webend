@@ -15,7 +15,9 @@
     "startApp": "npm run buildServer && node ./build/start.js",
     "testNodeUnit": "npm run buildServer && tsc -p spec && istanbul cover node_modules/jasmine/bin/jasmine.js",
     "test": "npm run testNodeUnit",
-    "postinstall": "cp -n src/pluginsystem/config.json ../../pluginconfig.json && cp -n src/config.json ../../config.json"
+    "postinstall": "npm-run-all cpPluginConfig cpConfig",
+    "cpPluginConfig": "cp -n src/pluginsystem/config.json ../../pluginconfig.json | true",
+    "cpConfig": "cp -n src/config.json ../../config.json | true"
   },
   "repository": {
     "type": "git",
